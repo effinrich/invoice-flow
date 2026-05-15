@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Blink UI Theme CSS
+   REQUIRED for @blinkdotnew/ui components to render correctly.
+   BlinkUIProvider adds .theme-{name} + .dark/.light to <html>,
+   activating the matching CSS variable set below.
+   ───────────────────────────────────────────────────────────────────────────── */
+@import '@blinkdotnew/ui/styles';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  /* Full viewport chain so AppShell / Sidebar h-full + flex-1 SidebarContent work */
+  html {
+    height: 100%;
+  }
+
+  #root {
+    min-height: 100%;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body {
+    min-height: 100%;
+    min-height: 100dvh;
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    letter-spacing: var(--tracking-normal);
+  }
+}
+
+/* ── App palette (unlayered, after utilities) ─────────────────────────────────
+   Overrides @blinkdotnew/ui theme colors. @layer base loses specificity to UI themes.
+   Dark mode uses :root.dark + .theme-*.dark to match BlinkUIProvider.
+   ⚠️ AGENT MUST REPLACE placeholder values with a custom palette.
+   ──────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* InvoiceFlow — Ember Orange palette. Bold, energetic, premium. */
+
+  /*
+   * Brand: Ember Orange
+   * Primary: hsl(16 95% 52%) — vivid orange-red
+   * Accent: warm cream tones
+   *
+   * Rich Forest (Calm/Professional):
+   * --primary: 151 55% 25%;        (Pine #1C6340)
+   * --accent: 151 55% 35%;         (Lighter pine #288C5A)
+   *
+   * Sunset Warmth (Friendly/Welcoming):
+   * --primary: 24 95% 53%;         (Orange #F97316)
+   * --accent: 24 95% 63%;          (Lighter orange #FB923C)
+   */
+
+  /* Colors - REPLACE ALL VALUES BELOW with your custom palette */
+  --background: 208 100% 97.0588%;
+  --foreground: 216.9231 19.1176% 26.6667%;
+  --card: 0 0% 100%;
+  --card-foreground: 216.9231 19.1176% 26.6667%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 216.9231 19.1176% 26.6667%;
+  /* InvoiceFlow — Ember Orange */
+  --primary: 16 95% 52%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 20 14% 96%;
+  --secondary-foreground: 20 10% 20%;
+  --muted: 20 10% 95%;
+  --muted-foreground: 20 8% 46%;
+  --accent: 16 95% 96%;
+  --accent-foreground: 16 80% 35%;
+  --destructive: 0 84.2365% 60.1961%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 20 8% 90%;
+  --input: 20 8% 90%;
+  --ring: 16 95% 52%;
+
+  /* Charts */
+  --chart-1: 16 95% 52%;
+  --chart-2: 35 90% 55%;
+  --chart-3: 47 96% 53%;
+  --chart-4: 151 55% 35%;
+  --chart-5: 262 52% 47%;
+
+  /* Sidebar */
+  --sidebar: 20 14% 97%;
+  --sidebar-foreground: 20 15% 10%;
+  --sidebar-primary: 16 95% 52%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 16 95% 96%;
+  --sidebar-accent-foreground: 16 80% 35%;
+  --sidebar-border: 20 8% 90%;
+  --sidebar-ring: 16 95% 52%;
+
+  /* Fonts */
+  --font-sans: 'Space Grotesk', 'DM Sans', sans-serif;
+  --font-serif: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Shadows */
+  --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-sm: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 1px 2px -2px hsl(0 0% 0% / 0.10);
+  --shadow: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 1px 2px -2px hsl(0 0% 0% / 0.10);
+  --shadow-md: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 2px 4px -2px hsl(0 0% 0% / 0.10);
+  --shadow-lg: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 4px 6px -2px hsl(0 0% 0% / 0.10);
+  --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 8px 10px -2px hsl(0 0% 0% / 0.10);
+  --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
+
+  /* Misc */
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+  --radius: 0.5rem;
+}
+
+:root.dark,
+.theme-linear.dark,
+.theme-glass.dark,
+.theme-midnight.dark,
+.theme-minimal.dark {
+  /* ⚠️ AGENT MUST REPLACE: Dark mode colors - replace with your custom dark palette */
+  --background: 222.2222 47.3684% 11.1765%;
+  --foreground: 216 12.1951% 83.9216%;
+  --card: 217.2414 32.5843% 17.451%;
+  --card-foreground: 216 12.1951% 83.9216%;
+  --popover: 217.2414 32.5843% 17.451%;
+  --popover-foreground: 216 12.1951% 83.9216%;
+  /* InvoiceFlow dark mode */
+  --primary: 16 90% 60%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 20 10% 18%;
+  --secondary-foreground: 20 8% 70%;
+  --muted: 20 10% 15%;
+  --muted-foreground: 20 8% 50%;
+  --accent: 16 40% 20%;
+  --accent-foreground: 16 90% 60%;
+  --destructive: 0 84.2365% 60.1961%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 20 8% 20%;
+  --input: 20 8% 20%;
+  --ring: 16 90% 60%;
+
+  /* Charts dark */
+  --chart-1: 16 90% 60%;
+  --chart-2: 35 85% 60%;
+  --chart-3: 47 90% 60%;
+  --chart-4: 151 55% 50%;
+  --chart-5: 262 52% 65%;
+
+  /* Sidebar dark */
+  --sidebar: 20 10% 12%;
+  --sidebar-foreground: 20 8% 80%;
+  --sidebar-primary: 16 90% 60%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 16 40% 20%;
+  --sidebar-accent-foreground: 16 90% 60%;
+  --sidebar-border: 20 8% 20%;
+  --sidebar-ring: 16 90% 60%;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Remove number input arrows */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  appearance: none;
+}
+
+input[type='number'] {
+  appearance: textfield;
+}
+
+/* Print styles for invoice */
+@media print {
+  header,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  .print\:max-w-none {
+    max-width: none !important;
+  }
+
+  .print\:w-full {
+    width: 100% !important;
+  }
+
+  .print\:rounded-none {
+    border-radius: 0 !important;
+  }
+}
