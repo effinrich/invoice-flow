@@ -23,6 +23,7 @@ function rowToModel(row: Record<string, unknown>): RecurringInvoice {
     notes: (row.notes as string) ?? '',
     accentColor: (row.accent_color as string) ?? 'hsl(16 95% 52%)',
     logoText: (row.logo_text as string) ?? 'YS',
+    logoUrl: (row.logo_url as string) ?? null,
     frequency: row.frequency as RecurringInvoice['frequency'],
     status: row.status as RecurringInvoice['status'],
     startDate: row.start_date as string,
@@ -51,6 +52,7 @@ function modelToRow(data: Partial<RecurringInvoice>) {
   if (data.notes !== undefined) row.notes = data.notes
   if (data.accentColor !== undefined) row.accent_color = data.accentColor
   if (data.logoText !== undefined) row.logo_text = data.logoText
+  if (data.logoUrl !== undefined) row.logo_url = data.logoUrl
   if (data.frequency !== undefined) row.frequency = data.frequency
   if (data.status !== undefined) row.status = data.status
   if (data.startDate !== undefined) row.start_date = data.startDate

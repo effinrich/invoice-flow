@@ -22,6 +22,7 @@ export interface RecurringInvoice {
   notes: string
   accentColor: string
   logoText: string
+  logoUrl: string | null
   // Schedule
   frequency: Frequency
   status: RecurringStatus
@@ -134,5 +135,6 @@ export function buildInvoiceFromTemplate(
     notes: template.notes,
     accentColor: template.accentColor,
     logoText: template.logoText,
+    logoUrl: template.logoUrl,
   }
 }

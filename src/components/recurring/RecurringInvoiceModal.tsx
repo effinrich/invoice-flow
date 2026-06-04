@@ -5,6 +5,7 @@ import type { RecurringInvoice, Frequency } from '../../types/recurring'
 import { FREQUENCY_OPTIONS, getNextDueDate } from '../../types/recurring'
 import type { LineItem } from '../../types/invoice'
 import { CURRENCIES } from '../../types/invoice'
+import { BrandingSection } from './BrandingSection'
 
 interface Props {
   open: boolean
@@ -40,6 +41,8 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
   const [notes, setNotes] = useState('Payment due within 30 days. Thank you for your business!')
   const [frequency, setFrequency] = useState<Frequency>('monthly')
   const [startDate, setStartDate] = useState(today)
+  const [accentColor, setAccentColor] = useState('hsl(16 95% 52%)')
+  const [logoUrl, setLogoUrl] = useState<string | null>(null)
   const [stripePaymentLinkUrl, setStripePaymentLinkUrl] = useState('')
   const [lineItems, setLineItems] = useState<LineItem[]>([
     { id: genId(), description: 'Service', quantity: 1, rate: 0 },
@@ -62,6 +65,8 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
       setFrequency(initial.frequency)
       setStartDate(initial.startDate)
       setStripePaymentLinkUrl(initial.stripePaymentLinkUrl ?? '')
+      setAccentColor(initial.accentColor ?? 'hsl(16 95% 52%)')
+      setLogoUrl(initial.logoUrl ?? null)
       setLineItems(initial.lineItems.length ? initial.lineItems : [{ id: genId(), description: 'Service', quantity: 1, rate: 0 }])
     } else {
       // Reset for new
@@ -77,6 +82,8 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
       setNotes('Payment due within 30 days. Thank you for your business!')
       setFrequency('monthly')
       setStartDate(today)
+      setAccentColor('hsl(16 95% 52%)')
+      setLogoUrl(null)
       setStripePaymentLinkUrl('')
       setLineItems([{ id: genId(), description: 'Service', quantity: 1, rate: 0 }])
     }
@@ -123,8 +130,9 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
       taxRate,
       discountAmount,
       notes,
-      accentColor: initial?.accentColor ?? 'hsl(16 95% 52%)',
+      accentColor,
       logoText: initial?.logoText ?? (clientName.trim().slice(0, 2).toUpperCase() || 'YS'),
+      logoUrl,
       frequency,
       status: initial?.status ?? 'active',
       startDate,
@@ -384,6 +392,21 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
                 style={inputStyle}
               />
             </div>
+          </section>
+
+          {/* Branding */}
+          <section>
+            <h3 className="text-sm font-bold mb-3" style={{ color: '#1a1208' }}>Branding</h3>
+            <p className="text-xs mb-4" style={{ color: '#9c8572' }}>
+              Your logo and brand color appear on every generated invoice and the client payment portal.
+            </p>
+            <BrandingSection
+              accentColor={accentColor}
+              logoUrl={logoUrl}
+              logoText={clientName.trim().slice(0, 2).toUpperCase() || 'YS'}
+              onColorChange={setAccentColor}
+              onLogoUrlChange={setLogoUrl}
+            />
           </section>
 
           {/* Stripe Payment */}

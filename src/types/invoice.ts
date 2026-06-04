@@ -32,6 +32,7 @@ export interface InvoiceData {
   // Branding
   accentColor: string
   logoText: string
+  logoUrl?: string | null
 }
 
 export const defaultInvoice: InvoiceData = {

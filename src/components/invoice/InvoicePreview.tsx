@@ -41,9 +41,23 @@ export default function InvoicePreview({ invoice, isPro = false }: InvoicePrevie
         {/* Top: Logo + Invoice label */}
         <div className="flex justify-between items-start mb-10">
           <div>
+            {invoice.logoUrl ? (
+              <img
+                src={invoice.logoUrl}
+                alt="Company logo"
+                className="w-14 h-14 rounded-2xl object-contain mb-3 border"
+                style={{ borderColor: '#f0ece8', background: '#fff' }}
+                onError={e => {
+                  // Fallback to initials if image fails
+                  const el = e.currentTarget
+                  el.style.display = 'none'
+                  el.nextElementSibling && ((el.nextElementSibling as HTMLElement).style.display = 'flex')
+                }}
+              />
+            ) : null}
             <div
               className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold mb-3"
-              style={{ background: accent, letterSpacing: '0.05em' }}
+              style={{ background: accent, letterSpacing: '0.05em', display: invoice.logoUrl ? 'none' : 'flex' }}
             >
               {invoice.logoText || 'YS'}
             </div>
