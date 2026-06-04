@@ -4,7 +4,7 @@ import InvoicePreview from '../components/invoice/InvoicePreview'
 import { type InvoiceData, defaultInvoice } from '../types/invoice'
 import {
   ArrowLeft, Printer, Download, Eye, EyeOff,
-  FileText, Sparkles, Crown, CheckCircle2, Lock, Loader2
+  FileText, Sparkles, Crown, CheckCircle2, Lock, Loader2, RotateCcw
 } from 'lucide-react'
 import { toast } from '@blinkdotnew/ui'
 import type { User } from '@blinkdotnew/sdk'
@@ -19,10 +19,11 @@ interface InvoiceCreatorProps {
   plan: Plan
   onUpgrade: (p?: 'pro' | 'agency') => void
   subLoading: boolean
+  seedInvoice?: InvoiceData | null
 }
 
-export default function InvoiceCreator({ onBack, user, isPro, plan, onUpgrade, subLoading }: InvoiceCreatorProps) {
-  const [invoice, setInvoice] = useState<InvoiceData>(defaultInvoice)
+export default function InvoiceCreator({ onBack, user, isPro, plan, onUpgrade, subLoading, seedInvoice }: InvoiceCreatorProps) {
+  const [invoice, setInvoice] = useState<InvoiceData>(seedInvoice ?? defaultInvoice)
   const [showPreview, setShowPreview] = useState(false)
   const [generatingPdf, setGeneratingPdf] = useState(false)
   const printRef = useRef<HTMLDivElement>(null)
@@ -134,7 +135,16 @@ export default function InvoiceCreator({ onBack, user, isPro, plan, onUpgrade, s
             </span>
           </div>
           <div className="hidden md:block h-5 border-l" style={{ borderColor: '#e8e0d8' }} />
-          <span className="hidden md:block text-sm" style={{ color: '#9c8572' }}>New Invoice</span>
+          <div className="hidden md:flex items-center gap-2">
+            <span className="hidden md:block text-sm" style={{ color: '#9c8572' }}>
+              {seedInvoice ? (
+                <span className="flex items-center gap-1.5">
+                  <RotateCcw size={12} />
+                  From recurring template
+                </span>
+              ) : 'New Invoice'}
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">

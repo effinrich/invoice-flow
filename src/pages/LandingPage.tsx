@@ -2,13 +2,14 @@ import { useState } from 'react'
 import {
   ArrowRight, CheckCircle2, Zap, FileText, Download,
   Star, ChevronRight, Sparkles, Clock, Shield, Globe,
-  BarChart3, Users, X, LogIn, LogOut
+  BarChart3, Users, X, LogIn, LogOut, RotateCcw
 } from 'lucide-react'
 import type { User } from '@blinkdotnew/sdk'
 import type { Plan } from '../hooks/useSubscription'
 
 interface LandingPageProps {
   onGetStarted: () => void
+  onGoToRecurring: () => void
   user: User | null
   isPro: boolean
   plan: Plan
@@ -32,7 +33,7 @@ const testimonials = [
   { name: 'Priya Nair', role: 'Marketing Consultant', avatar: 'PN', quote: "Finally, an invoicing tool that doesn't feel like it was built in 2005. The UX is exceptional.", stars: 5 },
 ]
 
-export default function LandingPage({ onGetStarted, user, isPro, plan, onUpgrade, onLogin, onLogout }: LandingPageProps) {
+export default function LandingPage({ onGetStarted, onGoToRecurring, user, isPro, plan, onUpgrade, onLogin, onLogout }: LandingPageProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const plans = [
@@ -76,6 +77,15 @@ export default function LandingPage({ onGetStarted, user, isPro, plan, onUpgrade
             <a href="#features" className="text-sm font-medium" style={{ color: '#6b5c4c' }}>Features</a>
             <a href="#pricing" className="text-sm font-medium" style={{ color: '#6b5c4c' }}>Pricing</a>
             <a href="#testimonials" className="text-sm font-medium" style={{ color: '#6b5c4c' }}>Reviews</a>
+            {user && (
+              <button
+                onClick={onGoToRecurring}
+                className="flex items-center gap-1.5 text-sm font-medium transition-colors hover:opacity-70"
+                style={{ color: '#6b5c4c' }}
+              >
+                <RotateCcw size={13} />Recurring
+              </button>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
