@@ -193,15 +193,19 @@ input[type='number'] {
 
 /* Print styles for invoice */
 @media print {
-  header,
-  .no-print {
+  /* Hide all app chrome — only the invoice renders */
+  .no-print,
+  header {
     display: none !important;
   }
 
-  body {
+  /* Force white background, remove backgrounds from layout wrappers */
+  body,
+  html {
     background: #fff !important;
   }
 
+  /* The preview panel: reset layout so invoice fills the page */
   .print\:max-w-none {
     max-width: none !important;
   }
@@ -212,5 +216,10 @@ input[type='number'] {
 
   .print\:rounded-none {
     border-radius: 0 !important;
+  }
+
+  /* Remove shadows in print */
+  * {
+    box-shadow: none !important;
   }
 }

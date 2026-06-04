@@ -2,6 +2,7 @@ import { type InvoiceData, calculateTotals, formatCurrency } from '../../types/i
 
 interface InvoicePreviewProps {
   invoice: InvoiceData
+  isPro?: boolean
 }
 
 function formatDate(dateStr: string) {
@@ -17,9 +18,10 @@ function formatDate(dateStr: string) {
   }
 }
 
-export default function InvoicePreview({ invoice }: InvoicePreviewProps) {
+export default function InvoicePreview({ invoice, isPro = false }: InvoicePreviewProps) {
   const { subtotal, discount, tax, total } = calculateTotals(invoice)
-  const accent = invoice.accentColor || 'hsl(16 95% 52%)'
+  // Free users always get the default brand accent; custom color is Pro-only
+  const accent = isPro ? (invoice.accentColor || 'hsl(16 95% 52%)') : 'hsl(16 95% 52%)'
   const accentLight = 'hsl(16 95% 97%)'
 
   return (
@@ -32,15 +34,13 @@ export default function InvoicePreview({ invoice }: InvoicePreviewProps) {
         fontFamily: "'Space Grotesk', 'DM Sans', sans-serif",
       }}
     >
-      {/* Header bar */}
+      {/* Header accent bar */}
       <div className="h-1.5 w-full" style={{ background: accent }} />
 
-      {/* Content */}
       <div className="p-10">
         {/* Top: Logo + Invoice label */}
         <div className="flex justify-between items-start mb-10">
           <div>
-            {/* Logo circle */}
             <div
               className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold mb-3"
               style={{ background: accent, letterSpacing: '0.05em' }}
@@ -86,30 +86,19 @@ export default function InvoicePreview({ invoice }: InvoicePreviewProps) {
         <table className="w-full mb-6">
           <thead>
             <tr style={{ borderBottom: '2px solid #f0ece8' }}>
-              <th
-                className="text-left text-xs font-semibold uppercase tracking-widest py-3"
-                style={{ color: '#9c8572', width: '50%' }}
-              >
+              <th className="text-left text-xs font-semibold uppercase tracking-widest py-3" style={{ color: '#9c8572', width: '50%' }}>
                 Description
               </th>
-              <th className="text-center text-xs font-semibold uppercase tracking-widest py-3 w-16" style={{ color: '#9c8572' }}>
-                Qty
-              </th>
-              <th className="text-right text-xs font-semibold uppercase tracking-widest py-3 w-28" style={{ color: '#9c8572' }}>
-                Rate
-              </th>
-              <th className="text-right text-xs font-semibold uppercase tracking-widest py-3 w-28" style={{ color: '#9c8572' }}>
-                Amount
-              </th>
+              <th className="text-center text-xs font-semibold uppercase tracking-widest py-3 w-16" style={{ color: '#9c8572' }}>Qty</th>
+              <th className="text-right text-xs font-semibold uppercase tracking-widest py-3 w-28" style={{ color: '#9c8572' }}>Rate</th>
+              <th className="text-right text-xs font-semibold uppercase tracking-widest py-3 w-28" style={{ color: '#9c8572' }}>Amount</th>
             </tr>
           </thead>
           <tbody>
             {invoice.lineItems.map((item, idx) => (
               <tr
                 key={item.id}
-                style={{
-                  borderBottom: `1px solid ${idx === invoice.lineItems.length - 1 ? 'transparent' : '#f8f5f2'}`,
-                }}
+                style={{ borderBottom: `1px solid ${idx === invoice.lineItems.length - 1 ? 'transparent' : '#f8f5f2'}` }}
               >
                 <td className="py-3.5 text-sm" style={{ color: '#1a1208' }}>
                   {item.description || <span style={{ color: '#c8b8a8' }}>No description</span>}
@@ -126,7 +115,7 @@ export default function InvoicePreview({ invoice }: InvoicePreviewProps) {
           </tbody>
         </table>
 
-        {/* Totals block */}
+        {/* Totals */}
         <div className="flex justify-end mb-10">
           <div className="w-64 space-y-2">
             <div className="flex justify-between text-sm" style={{ color: '#6b5c4c' }}>
@@ -147,10 +136,7 @@ export default function InvoicePreview({ invoice }: InvoicePreviewProps) {
                 <span className="font-mono">{formatCurrency(tax, invoice.currency)}</span>
               </div>
             )}
-            <div
-              className="flex justify-between items-center pt-3 mt-1 border-t"
-              style={{ borderColor: '#e8e0d8' }}
-            >
+            <div className="flex justify-between items-center pt-3 mt-1 border-t" style={{ borderColor: '#e8e0d8' }}>
               <span className="text-base font-bold" style={{ color: '#1a1208' }}>Total Due</span>
               <span className="text-xl font-bold font-mono" style={{ color: accent }}>
                 {formatCurrency(total, invoice.currency)}
@@ -178,13 +164,25 @@ export default function InvoicePreview({ invoice }: InvoicePreviewProps) {
         )}
 
         {/* Footer */}
-        <div
-          className="mt-10 pt-6 border-t flex items-center justify-between"
-          style={{ borderColor: '#f0ece8' }}
-        >
-          <p className="text-xs" style={{ color: '#9c8572' }}>
-            Generated with <span style={{ color: accent }}>InvoiceFlow</span>
-          </p>
+        <div className="mt-10 pt-6 border-t flex items-center justify-between" style={{ borderColor: '#f0ece8' }}>
+          {isPro ? (
+            // Pro: minimal, unobtrusive
+            <p className="text-xs" style={{ color: '#d4c9be' }}>invoiceflow.io</p>
+          ) : (
+            // Free: honest watermark — it's what motivates the upgrade
+            <div className="flex items-center gap-2">
+              <p className="text-xs" style={{ color: '#9c8572' }}>
+                Created with{' '}
+                <span className="font-semibold" style={{ color: accent }}>InvoiceFlow</span>
+              </p>
+              <span
+                className="px-1.5 py-0.5 rounded font-medium"
+                style={{ background: 'hsl(16 95% 96%)', color: 'hsl(16 80% 40%)', fontSize: '10px' }}
+              >
+                Free
+              </span>
+            </div>
+          )}
           <p className="text-xs font-mono" style={{ color: '#c8b8a8' }}>
             #{invoice.invoiceNumber} · {invoice.currency}
           </p>
