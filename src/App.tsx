@@ -4,6 +4,7 @@ import InvoiceCreator from './pages/InvoiceCreator'
 import RecurringInvoices from './pages/RecurringInvoices'
 import { useAuth } from './hooks/useAuth'
 import { useSubscription, recordSubscription } from './hooks/useSubscription'
+import { useAutoGenerate } from './hooks/useAutoGenerate'
 import { blink } from './blink/client'
 import { UpgradeModal } from './components/UpgradeModal'
 import { toast } from '@blinkdotnew/ui'
@@ -20,6 +21,9 @@ export default function App() {
 
   const { user, isLoading: authLoading } = useAuth()
   const { plan, isPro, isAgency, isLoading: subLoading, refetch } = useSubscription(user?.id ?? null)
+
+  // Auto-generate and email invoices for active recurring schedules
+  useAutoGenerate(user?.id ?? null)
 
   // Handle post-Stripe-checkout redirect
   useEffect(() => {

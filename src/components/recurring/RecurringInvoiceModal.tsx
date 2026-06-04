@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@blinkdotnew/ui'
-import { Plus, Trash2, ExternalLink } from 'lucide-react'
+import { Plus, Trash2, ExternalLink, Mail, Clock } from 'lucide-react'
 import type { RecurringInvoice, Frequency } from '../../types/recurring'
 import { FREQUENCY_OPTIONS, getNextDueDate } from '../../types/recurring'
 import type { LineItem } from '../../types/invoice'
@@ -44,6 +44,8 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
   const [accentColor, setAccentColor] = useState('hsl(16 95% 52%)')
   const [logoUrl, setLogoUrl] = useState<string | null>(null)
   const [stripePaymentLinkUrl, setStripePaymentLinkUrl] = useState('')
+  const [autoEmailEnabled, setAutoEmailEnabled] = useState(false)
+  const [daysBefore, setDaysBefore] = useState(3)
   const [lineItems, setLineItems] = useState<LineItem[]>([
     { id: genId(), description: 'Service', quantity: 1, rate: 0 },
   ])
@@ -67,6 +69,8 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
       setStripePaymentLinkUrl(initial.stripePaymentLinkUrl ?? '')
       setAccentColor(initial.accentColor ?? 'hsl(16 95% 52%)')
       setLogoUrl(initial.logoUrl ?? null)
+      setAutoEmailEnabled(initial.autoEmailEnabled ?? false)
+      setDaysBefore(initial.daysBefore ?? 3)
       setLineItems(initial.lineItems.length ? initial.lineItems : [{ id: genId(), description: 'Service', quantity: 1, rate: 0 }])
     } else {
       // Reset for new
@@ -84,6 +88,8 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
       setStartDate(today)
       setAccentColor('hsl(16 95% 52%)')
       setLogoUrl(null)
+      setAutoEmailEnabled(false)
+      setDaysBefore(3)
       setStripePaymentLinkUrl('')
       setLineItems([{ id: genId(), description: 'Service', quantity: 1, rate: 0 }])
     }
@@ -138,6 +144,8 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
       startDate,
       nextDueDate: nextDue.toISOString().split('T')[0],
       stripePaymentLinkUrl: stripePaymentLinkUrl.trim() || null,
+      autoEmailEnabled,
+      daysBefore,
     })
     onClose()
   }
@@ -407,6 +415,71 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
               onColorChange={setAccentColor}
               onLogoUrlChange={setLogoUrl}
             />
+          </section>
+
+          {/* Auto-Send Email */}
+          <section>
+            <div className="flex items-start justify-between gap-4 mb-3">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm font-bold flex items-center gap-1.5" style={{ color: '#1a1208' }}>
+                  <Mail size={14} />
+                  Auto-Send Email
+                </h3>
+                <p className="text-xs mt-1" style={{ color: '#9c8572' }}>
+                  Automatically generate and email this invoice to your client before each due date.
+                </p>
+              </div>
+              {/* Toggle switch */}
+              <button
+                type="button"
+                role="switch"
+                aria-checked={autoEmailEnabled}
+                onClick={() => setAutoEmailEnabled(v => !v)}
+                className="relative shrink-0 inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none mt-0.5"
+                style={{ background: autoEmailEnabled ? 'hsl(16 95% 52%)' : '#d4c9be' }}
+              >
+                <span
+                  className="inline-block h-4 w-4 rounded-full bg-white shadow transform transition-transform"
+                  style={{ transform: autoEmailEnabled ? 'translateX(22px)' : 'translateX(4px)' }}
+                />
+              </button>
+            </div>
+
+            {autoEmailEnabled && (
+              <div
+                className="p-4 rounded-xl border space-y-3"
+                style={{ background: '#fff8f5', borderColor: 'hsl(16 95% 52% / 0.25)' }}
+              >
+                {!clientEmail.trim() && (
+                  <div
+                    className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg"
+                    style={{ background: '#fef3cd', color: '#92610a' }}
+                  >
+                    <span>⚠</span>
+                    <span>A client email is required — add one in the Bill To section above.</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Clock size={14} style={{ color: '#9c8572', flexShrink: 0 }} />
+                  <span className="text-sm" style={{ color: '#38312e' }}>Send invoice</span>
+                  <input
+                    type="number"
+                    min={0}
+                    max={30}
+                    value={daysBefore}
+                    onChange={e => setDaysBefore(Math.max(0, Math.min(30, parseInt(e.target.value) || 0)))}
+                    className="w-16 px-2 py-1.5 text-sm rounded-lg border outline-none text-center focus:ring-2 focus:ring-orange-200 focus:border-orange-400"
+                    style={{ borderColor: '#e8e0d8', color: '#1a1208', background: '#fff' }}
+                  />
+                  <span className="text-sm" style={{ color: '#38312e' }}>
+                    {daysBefore === 0 ? 'days — on the due date' : `day${daysBefore !== 1 ? 's' : ''} before the due date`}
+                  </span>
+                </div>
+                <p className="text-xs" style={{ color: '#9c8572' }}>
+                  Invoices are generated and sent automatically each time you open the app when the trigger date is reached. The email includes your branding and a payment link.
+                </p>
+              </div>
+            )}
           </section>
 
           {/* Stripe Payment */}
