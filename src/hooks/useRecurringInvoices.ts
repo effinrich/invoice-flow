@@ -29,6 +29,7 @@ function rowToModel(row: Record<string, unknown>): RecurringInvoice {
     nextDueDate: row.next_due_date as string,
     lastGeneratedAt: (row.last_generated_at as string) ?? null,
     invoiceCount: Number(row.invoice_count ?? 0),
+    stripePaymentLinkUrl: (row.stripe_payment_link_url as string) ?? null,
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
   }
@@ -56,6 +57,7 @@ function modelToRow(data: Partial<RecurringInvoice>) {
   if (data.nextDueDate !== undefined) row.next_due_date = data.nextDueDate
   if (data.lastGeneratedAt !== undefined) row.last_generated_at = data.lastGeneratedAt
   if (data.invoiceCount !== undefined) row.invoice_count = data.invoiceCount
+  if (data.stripePaymentLinkUrl !== undefined) row.stripe_payment_link_url = data.stripePaymentLinkUrl
   if (data.updatedAt !== undefined) row.updated_at = data.updatedAt
   return row
 }

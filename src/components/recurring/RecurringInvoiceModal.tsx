@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@blinkdotnew/ui'
-import { Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2, ExternalLink } from 'lucide-react'
 import type { RecurringInvoice, Frequency } from '../../types/recurring'
 import { FREQUENCY_OPTIONS, getNextDueDate } from '../../types/recurring'
 import type { LineItem } from '../../types/invoice'
@@ -40,6 +40,7 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
   const [notes, setNotes] = useState('Payment due within 30 days. Thank you for your business!')
   const [frequency, setFrequency] = useState<Frequency>('monthly')
   const [startDate, setStartDate] = useState(today)
+  const [stripePaymentLinkUrl, setStripePaymentLinkUrl] = useState('')
   const [lineItems, setLineItems] = useState<LineItem[]>([
     { id: genId(), description: 'Service', quantity: 1, rate: 0 },
   ])
@@ -60,6 +61,7 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
       setNotes(initial.notes)
       setFrequency(initial.frequency)
       setStartDate(initial.startDate)
+      setStripePaymentLinkUrl(initial.stripePaymentLinkUrl ?? '')
       setLineItems(initial.lineItems.length ? initial.lineItems : [{ id: genId(), description: 'Service', quantity: 1, rate: 0 }])
     } else {
       // Reset for new
@@ -75,6 +77,7 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
       setNotes('Payment due within 30 days. Thank you for your business!')
       setFrequency('monthly')
       setStartDate(today)
+      setStripePaymentLinkUrl('')
       setLineItems([{ id: genId(), description: 'Service', quantity: 1, rate: 0 }])
     }
     setErrors({})
@@ -126,6 +129,7 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
       status: initial?.status ?? 'active',
       startDate,
       nextDueDate: nextDue.toISOString().split('T')[0],
+      stripePaymentLinkUrl: stripePaymentLinkUrl.trim() || null,
     })
     onClose()
   }
@@ -379,6 +383,42 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
                 className={`${inputCls} ${focusRingStyle} resize-none`}
                 style={inputStyle}
               />
+            </div>
+          </section>
+
+          {/* Stripe Payment */}
+          <section>
+            <h3 className="text-sm font-bold mb-1" style={{ color: '#1a1208' }}>Online Payment (optional)</h3>
+            <p className="text-xs mb-3" style={{ color: '#9c8572' }}>
+              Paste a Stripe Payment Link so clients can pay this invoice online. Create one at{' '}
+              <a
+                href="https://dashboard.stripe.com/payment-links"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-0.5 underline"
+                style={{ color: 'hsl(16 95% 52%)' }}
+              >
+                dashboard.stripe.com/payment-links <ExternalLink size={10} />
+              </a>
+            </p>
+            <div>
+              <label className={labelCls} style={labelStyle}>Stripe Payment Link URL</label>
+              <input
+                type="url"
+                value={stripePaymentLinkUrl}
+                onChange={e => setStripePaymentLinkUrl(e.target.value)}
+                placeholder="https://buy.stripe.com/..."
+                className={`${inputCls} ${focusRingStyle}`}
+                style={inputStyle}
+              />
+              {stripePaymentLinkUrl && !stripePaymentLinkUrl.startsWith('https://') && (
+                <p className="text-xs mt-1" style={{ color: '#ef4444' }}>Must be a valid https:// URL</p>
+              )}
+              {stripePaymentLinkUrl && stripePaymentLinkUrl.startsWith('https://') && (
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: 'hsl(151 55% 35%)' }}>
+                  ✓ Clients will see a "Pay Now" button on their invoice portal
+                </p>
+              )}
             </div>
           </section>
         </div>

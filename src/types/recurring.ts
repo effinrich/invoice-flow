@@ -29,6 +29,8 @@ export interface RecurringInvoice {
   nextDueDate: string
   lastGeneratedAt: string | null
   invoiceCount: number
+  // Stripe
+  stripePaymentLinkUrl: string | null
   // Meta
   createdAt: string
   updatedAt: string
