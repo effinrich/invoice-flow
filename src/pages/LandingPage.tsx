@@ -25,7 +25,6 @@ const features = [
   { icon: BarChart3, title: 'Auto calculations', desc: 'Subtotals, taxes, discounts — calculated instantly as you type.', color: 'bg-yellow-50 text-yellow-600' },
   { icon: Shield, title: 'Your brand, front and center', desc: 'Add your logo, custom colors, and payment terms effortlessly.', color: 'bg-orange-50 text-orange-600' },
   { icon: Globe, title: 'Multi-currency support', desc: 'Invoice clients worldwide in any currency with proper formatting.', color: 'bg-amber-50 text-amber-600' },
-  { icon: RotateCcw, title: 'Recurring invoices', desc: 'Set up subscription schedules for retainer clients — auto-numbered, portal-linked, and ready to pay.', color: 'bg-orange-50 text-orange-500' },
 ]
 
 const testimonials = [
