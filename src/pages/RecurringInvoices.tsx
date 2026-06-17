@@ -4,7 +4,8 @@ import {
   FileText, Calendar, Crown, AlertCircle, Sparkles, RotateCcw,
   Link2, Copy, CheckCircle2, CreditCard
 } from 'lucide-react'
-import { toast } from '@blinkdotnew/ui'
+import { Button, toast } from '@blinkdotnew/ui'
+import { cn } from '../lib/utils'
 import type { User } from '@blinkdotnew/sdk'
 import type { RecurringInvoice } from '../types/recurring'
 import { FREQUENCY_LABELS, daysUntil, buildInvoiceFromTemplate } from '../types/recurring'
@@ -35,7 +36,7 @@ function DueBadge({ nextDueDate }: { nextDueDate: string }) {
   const days = daysUntil(nextDueDate)
   if (days < 0) {
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold" style={{ background: '#fef2f2', color: '#dc2626' }}>
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-destructive/10 text-destructive">
         <AlertCircle size={10} />Overdue
       </span>
     )
@@ -55,7 +56,7 @@ function DueBadge({ nextDueDate }: { nextDueDate: string }) {
     )
   }
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ background: '#f0ece8', color: '#6b5c4c' }}>
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
       In {days}d
     </span>
   )
@@ -85,12 +86,10 @@ function RecurringCard({
 
   return (
     <div
-      className="rounded-2xl border p-5 transition-shadow hover:shadow-md"
-      style={{
-        background: isPaused ? '#faf9f7' : '#fff',
-        borderColor: isPaused ? '#e8e0d8' : '#e2d8d0',
-        opacity: isPaused ? 0.8 : 1,
-      }}
+      className={cn(
+        'rounded-2xl border border-border p-5 transition-shadow hover:shadow-md',
+        isPaused ? 'bg-muted opacity-80' : 'bg-card',
+      )}
     >
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-center gap-3 min-w-0">
@@ -101,14 +100,14 @@ function RecurringCard({
             {item.logoText || item.clientName.slice(0, 2).toUpperCase()}
           </div>
           <div className="min-w-0">
-            <p className="font-bold text-base truncate" style={{ color: '#1a1208' }}>{item.clientName}</p>
+            <p className="font-bold text-base truncate text-foreground">{item.clientName}</p>
             <div className="flex items-center gap-2 mt-0.5">
-              <span className="inline-flex items-center gap-1 text-xs font-medium" style={{ color: '#9c8572' }}>
+              <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
                 <RotateCcw size={10} />
                 {FREQUENCY_LABELS[item.frequency]}
               </span>
               {isPaused && (
-                <span className="px-1.5 py-0.5 rounded text-xs font-bold" style={{ background: '#f0ece8', color: '#9c8572' }}>
+                <span className="px-1.5 py-0.5 rounded text-xs font-bold bg-muted text-muted-foreground">
                   Paused
                 </span>
               )}
@@ -117,28 +116,28 @@ function RecurringCard({
         </div>
 
         <div className="text-right shrink-0">
-          <p className="text-lg font-bold font-mono" style={{ color: '#1a1208' }}>
+          <p className="text-lg font-bold font-mono text-foreground">
             {formatCurrency(total, item.currency)}
           </p>
-          <p className="text-xs" style={{ color: '#9c8572' }}>per invoice</p>
+          <p className="text-xs text-muted-foreground">per invoice</p>
         </div>
       </div>
 
       {/* Next due + stats */}
-      <div className="grid grid-cols-3 gap-2 mb-4 px-3 py-2.5 rounded-xl" style={{ background: '#faf9f7' }}>
+      <div className="grid grid-cols-3 gap-2 mb-4 px-3 py-2.5 rounded-xl bg-muted">
         <div>
-          <p className="text-xs uppercase tracking-widest font-semibold mb-0.5" style={{ color: '#9c8572' }}>Next Due</p>
-          <p className="text-xs font-medium mb-1" style={{ color: '#1a1208' }}>{formatDate(item.nextDueDate)}</p>
+          <p className="text-xs uppercase tracking-widest font-semibold mb-0.5 text-muted-foreground">Next Due</p>
+          <p className="text-xs font-medium mb-1 text-foreground">{formatDate(item.nextDueDate)}</p>
           <DueBadge nextDueDate={item.nextDueDate} />
         </div>
         <div>
-          <p className="text-xs uppercase tracking-widest font-semibold mb-0.5" style={{ color: '#9c8572' }}>Generated</p>
-          <p className="text-sm font-bold" style={{ color: '#1a1208' }}>{item.invoiceCount}</p>
-          <p className="text-xs" style={{ color: '#9c8572' }}>invoices</p>
+          <p className="text-xs uppercase tracking-widest font-semibold mb-0.5 text-muted-foreground">Generated</p>
+          <p className="text-sm font-bold text-foreground">{item.invoiceCount}</p>
+          <p className="text-xs text-muted-foreground">invoices</p>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-widest font-semibold mb-0.5" style={{ color: '#9c8572' }}>Last</p>
-          <p className="text-xs font-medium" style={{ color: '#1a1208' }}>
+          <p className="text-xs uppercase tracking-widest font-semibold mb-0.5 text-muted-foreground">Last</p>
+          <p className="text-xs font-medium text-foreground">
             {item.lastGeneratedAt ? formatDate(item.lastGeneratedAt.split('T')[0]) : '—'}
           </p>
         </div>
@@ -158,38 +157,38 @@ function RecurringCard({
         {isPaused && (
           <button
             onClick={onToggle}
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90"
-            style={{ background: 'hsl(16 95% 96%)', color: 'hsl(16 80% 35%)' }}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all hover:opacity-90 bg-accent text-accent-foreground"
           >
             <Play size={14} />Resume
           </button>
         )}
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onEdit}
-          className="w-10 h-10 flex items-center justify-center rounded-xl border transition-colors hover:bg-orange-50"
-          style={{ borderColor: '#e8e0d8', color: '#6b5c4c' }}
+          className="rounded-xl border border-border text-muted-foreground hover:bg-accent"
           title="Edit"
         >
           <Edit2 size={14} />
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onToggle}
-          className="w-10 h-10 flex items-center justify-center rounded-xl border transition-colors hover:bg-orange-50"
-          style={{ borderColor: '#e8e0d8', color: '#6b5c4c' }}
+          className="rounded-xl border border-border text-muted-foreground hover:bg-accent"
           title={isPaused ? 'Resume' : 'Pause'}
         >
           {isPaused ? <Play size={14} /> : <Pause size={14} />}
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onDelete}
-          className="w-10 h-10 flex items-center justify-center rounded-xl border transition-colors hover:bg-red-50"
-          style={{ borderColor: '#e8e0d8', color: '#9c8572' }}
+          className="rounded-xl border border-border text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50"
           title="Delete"
-          onMouseEnter={e => { e.currentTarget.style.color = '#dc2626'; e.currentTarget.style.borderColor = '#fca5a5' }}
-          onMouseLeave={e => { e.currentTarget.style.color = '#9c8572'; e.currentTarget.style.borderColor = '#e8e0d8' }}
         >
           <Trash2 size={14} />
-        </button>
+        </Button>
       </div>
     </div>
   )
@@ -243,37 +242,41 @@ export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isP
   const showProGate = !isPro
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#faf9f7', fontFamily: "'Space Grotesk', 'DM Sans', sans-serif" }}>
+    <div className="min-h-screen flex flex-col bg-muted font-sans">
 
       {/* Header */}
       <header
-        className="sticky top-0 z-40 border-b px-4 md:px-6 h-16 flex items-center justify-between gap-4"
-        style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderColor: '#e8e0d8' }}
+        className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur-sm px-4 md:px-6 h-16 flex items-center justify-between gap-4"
       >
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 rounded-lg hover:bg-orange-50 transition-colors" style={{ color: '#6b5c4c' }}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onBack}
+            className="rounded-lg text-muted-foreground hover:bg-accent"
+            aria-label="Back"
+          >
             <ArrowLeft size={18} />
-          </button>
+          </Button>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'hsl(16 95% 52%)' }}>
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-primary">
               <FileText size={14} className="text-white" />
             </div>
-            <span className="font-bold text-base" style={{ color: '#1a1208' }}>
-              Invoice<span style={{ color: 'hsl(16 95% 52%)' }}>Flow</span>
+            <span className="font-bold text-base text-foreground">
+              Invoice<span className="text-primary">Flow</span>
             </span>
           </div>
-          <div className="hidden md:block h-5 border-l" style={{ borderColor: '#e8e0d8' }} />
+          <div className="hidden md:block h-5 border-l border-border" />
           <div className="hidden md:flex items-center gap-2">
-            <RotateCcw size={14} style={{ color: '#9c8572' }} />
-            <span className="text-sm" style={{ color: '#9c8572' }}>Recurring Invoices</span>
+            <RotateCcw size={14} className="text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">Recurring Invoices</span>
           </div>
         </div>
 
         {!showProGate && (
           <button
             onClick={() => { setEditing(null); setModalOpen(true) }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold text-white transition-all hover:opacity-90 active:scale-[0.98]"
-            style={{ background: 'hsl(16 95% 52%)', boxShadow: '0 4px 14px hsl(16 95% 52% / 0.35)' }}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold text-white transition-all hover:opacity-90 active:scale-[0.98] bg-primary shadow-md"
           >
             <Plus size={15} />
             <span className="hidden sm:inline">New Schedule</span>
@@ -286,26 +289,25 @@ export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isP
         {/* Pro gate */}
         {showProGate && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style={{ background: 'hsl(16 95% 96%)' }}>
-              <Crown size={28} style={{ color: 'hsl(16 95% 52%)' }} />
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 bg-accent">
+              <Crown size={28} className="text-primary" />
             </div>
-            <h2 className="text-2xl font-bold mb-2" style={{ color: '#1a1208' }}>Recurring Invoices</h2>
-            <p className="text-base max-w-sm mb-1" style={{ color: '#6b5c4c' }}>
+            <h2 className="text-2xl font-bold mb-2 text-foreground">Recurring Invoices</h2>
+            <p className="text-base max-w-sm mb-1 text-muted-foreground">
               Set up automatic invoice schedules for retainer clients and ongoing contracts.
             </p>
-            <p className="text-sm mb-8" style={{ color: '#9c8572' }}>Available on Pro and Agency plans.</p>
+            <p className="text-sm mb-8 text-muted-foreground">Available on Pro and Agency plans.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 text-left max-w-md w-full">
               {PRO_FEATURES.map(({ label, Icon }) => (
-                <div key={label} className="flex items-center gap-2.5 px-4 py-3 rounded-xl border" style={{ borderColor: '#e8e0d8', background: '#fff' }}>
-                  <Icon size={14} style={{ color: 'hsl(16 95% 52%)', flexShrink: 0 }} />
-                  <span className="text-sm" style={{ color: '#3d2e22' }}>{label}</span>
+                <div key={label} className="flex items-center gap-2.5 px-4 py-3 rounded-xl border border-border bg-card">
+                  <Icon size={14} className="text-primary shrink-0" />
+                  <span className="text-sm text-foreground">{label}</span>
                 </div>
               ))}
             </div>
             <button
               onClick={() => onUpgrade('pro')}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 active:scale-[0.98]"
-              style={{ background: 'hsl(16 95% 52%)', boxShadow: '0 4px 14px hsl(16 95% 52% / 0.35)' }}
+              className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 active:scale-[0.98] bg-primary shadow-md"
             >
               <Sparkles size={14} />Upgrade to Pro — $12/mo
             </button>
@@ -323,9 +325,9 @@ export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isP
                   { label: 'Due This Week', value: items.filter(i => i.status === 'active' && daysUntil(i.nextDueDate) <= 7).length },
                   { label: 'Total Generated', value: items.reduce((s, i) => s + i.invoiceCount, 0) },
                 ].map(stat => (
-                  <div key={stat.label} className="rounded-2xl border px-5 py-4" style={{ background: '#fff', borderColor: '#e8e0d8' }}>
-                    <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#9c8572' }}>{stat.label}</p>
-                    <p className="text-2xl font-bold" style={{ color: '#1a1208' }}>{stat.value}</p>
+                  <div key={stat.label} className="rounded-2xl border border-border px-5 py-4 bg-card">
+                    <p className="text-xs font-semibold uppercase tracking-widest mb-1 text-muted-foreground">{stat.label}</p>
+                    <p className="text-2xl font-bold text-foreground">{stat.value}</p>
                   </div>
                 ))}
               </div>
@@ -335,8 +337,7 @@ export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isP
             {isLoading && (
               <div className="flex items-center justify-center py-20">
                 <div
-                  className="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent"
-                  style={{ borderColor: 'hsl(16 95% 52%)', borderTopColor: 'transparent' }}
+                  className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent"
                 />
               </div>
             )}
@@ -344,17 +345,16 @@ export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isP
             {/* Empty state */}
             {!isLoading && items.length === 0 && (
               <div className="flex flex-col items-center justify-center py-20 text-center">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'hsl(16 95% 96%)' }}>
-                  <RotateCcw size={24} style={{ color: 'hsl(16 95% 52%)' }} />
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-accent">
+                  <RotateCcw size={24} className="text-primary" />
                 </div>
-                <h3 className="text-lg font-bold mb-1" style={{ color: '#1a1208' }}>No recurring invoices yet</h3>
-                <p className="text-sm mb-6 max-w-xs" style={{ color: '#9c8572' }}>
+                <h3 className="text-lg font-bold mb-1 text-foreground">No recurring invoices yet</h3>
+                <p className="text-sm mb-6 max-w-xs text-muted-foreground">
                   Set up a schedule for retainer clients and generate invoices in one click.
                 </p>
                 <button
                   onClick={() => { setEditing(null); setModalOpen(true) }}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white"
-                  style={{ background: 'hsl(16 95% 52%)', boxShadow: '0 4px 12px hsl(16 95% 52% / 0.3)' }}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-primary shadow-md"
                 >
                   <Plus size={14} />Create your first schedule
                 </button>
@@ -398,24 +398,22 @@ export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isP
 
       {/* Delete confirmation */}
       {deleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.4)' }}>
-          <div className="rounded-2xl p-6 max-w-sm w-full shadow-2xl" style={{ background: '#fff' }}>
-            <h3 className="text-base font-bold mb-2" style={{ color: '#1a1208' }}>Delete recurring invoice?</h3>
-            <p className="text-sm mb-5" style={{ color: '#6b5c4c' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
+          <div className="rounded-2xl p-6 max-w-sm w-full shadow-2xl bg-card">
+            <h3 className="text-base font-bold mb-2 text-foreground">Delete recurring invoice?</h3>
+            <p className="text-sm mb-5 text-muted-foreground">
               This schedule will be permanently deleted. Past invoices are not affected.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setDeleteConfirm(null)}
-                className="flex-1 py-2 rounded-xl text-sm font-medium border transition-colors hover:bg-gray-50"
-                style={{ borderColor: '#e8e0d8', color: '#6b5c4c' }}
+                className="flex-1 py-2 rounded-xl text-sm font-medium border border-border text-muted-foreground transition-colors hover:bg-muted"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleDelete(deleteConfirm)}
-                className="flex-1 py-2 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90"
-                style={{ background: '#dc2626' }}
+                className="flex-1 py-2 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 bg-destructive"
               >
                 Delete
               </button>
