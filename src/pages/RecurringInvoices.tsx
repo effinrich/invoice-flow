@@ -246,7 +246,7 @@ export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isP
 
       {/* Header */}
       <header
-        className="sticky top-0 z-40 border-b bg-card/95 backdrop-blur-sm px-4 md:px-6 h-16 flex items-center justify-between gap-4"
+        className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur-sm px-4 md:px-6 h-16 flex items-center justify-between gap-4"
       >
         <div className="flex items-center gap-3">
           <Button
@@ -266,7 +266,7 @@ export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isP
               Invoice<span className="text-primary">Flow</span>
             </span>
           </div>
-          <div className="hidden md:block h-5 border-l" />
+          <div className="hidden md:block h-5 border-l border-border" />
           <div className="hidden md:flex items-center gap-2">
             <RotateCcw size={14} className="text-muted-foreground" />
             <span className="text-sm text-muted-foreground">Recurring Invoices</span>
