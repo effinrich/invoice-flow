@@ -1,22 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import {
   ArrowRight, CheckCircle2, Zap, FileText, Download,
   Star, ChevronRight, Sparkles, Clock, Shield, Globe,
   BarChart3, Users, X, LogIn, LogOut, RotateCcw
 } from 'lucide-react'
-import type { User } from '@blinkdotnew/sdk'
-import type { Plan } from '../hooks/useSubscription'
-
-interface LandingPageProps {
-  onGetStarted: () => void
-  onGoToRecurring: () => void
-  user: User | null
-  isPro: boolean
-  plan: Plan
-  onUpgrade: (plan?: 'pro' | 'agency') => void
-  onLogin: () => void
-  onLogout: () => void
-}
+import { useAppContext } from '../layouts/RootLayout'
 
 const features = [
   { icon: Zap, title: 'Create in 60 seconds', desc: 'Intuitive form with live preview. Fill once, send immediately.', color: 'bg-orange-50 text-orange-500' },
@@ -33,8 +22,13 @@ const testimonials = [
   { name: 'Priya Nair', role: 'Marketing Consultant', avatar: 'PN', quote: "Finally, an invoicing tool that doesn't feel like it was built in 2005. The UX is exceptional.", stars: 5 },
 ]
 
-export default function LandingPage({ onGetStarted, onGoToRecurring, user, isPro, plan, onUpgrade, onLogin, onLogout }: LandingPageProps) {
+export default function LandingPage() {
+  const { user, isPro, plan, onUpgrade, onLogin, onLogout } = useAppContext()
+  const navigate = useNavigate()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const goToCreate = () => navigate({ to: '/create' })
+  const goToRecurring = () => navigate({ to: '/recurring' })
 
   const plans = [
     {
@@ -79,7 +73,7 @@ export default function LandingPage({ onGetStarted, onGoToRecurring, user, isPro
             <a href="#testimonials" className="text-sm font-medium" style={{ color: '#6b5c4c' }}>Reviews</a>
             {user && (
               <button
-                onClick={onGoToRecurring}
+                onClick={goToRecurring}
                 className="flex items-center gap-1.5 text-sm font-medium transition-colors hover:opacity-70"
                 style={{ color: '#6b5c4c' }}
               >
@@ -101,7 +95,7 @@ export default function LandingPage({ onGetStarted, onGoToRecurring, user, isPro
                     {plan === 'agency' ? '⚡ Agency' : '⭐ Pro'}
                   </span>
                 )}
-                <button onClick={onGetStarted} className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white hover:opacity-90" style={{ background: 'hsl(16 95% 52%)' }}>
+                <button onClick={goToCreate} className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white hover:opacity-90" style={{ background: 'hsl(16 95% 52%)' }}>
                   Open Creator <ArrowRight size={15} />
                 </button>
                 <button onClick={onLogout} className="hidden md:flex p-2 rounded-lg" style={{ color: '#9c8572' }} title="Sign out">
@@ -113,7 +107,7 @@ export default function LandingPage({ onGetStarted, onGoToRecurring, user, isPro
                 <button onClick={onLogin} className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium" style={{ color: '#6b5c4c' }}>
                   <LogIn size={15} />Sign in
                 </button>
-                <button className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white hover:opacity-90" style={{ background: 'hsl(16 95% 52%)', boxShadow: '0 4px 14px hsl(16 95% 52% / 0.35)' }} onClick={onGetStarted}>
+                <button className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white hover:opacity-90" style={{ background: 'hsl(16 95% 52%)', boxShadow: '0 4px 14px hsl(16 95% 52% / 0.35)' }} onClick={goToCreate}>
                   Create Invoice Free <ArrowRight size={15} />
                 </button>
               </>
@@ -129,7 +123,7 @@ export default function LandingPage({ onGetStarted, onGoToRecurring, user, isPro
             <a href="#features" className="text-sm font-medium py-2" style={{ color: '#6b5c4c' }} onClick={() => setMobileMenuOpen(false)}>Features</a>
             <a href="#pricing" className="text-sm font-medium py-2" style={{ color: '#6b5c4c' }} onClick={() => setMobileMenuOpen(false)}>Pricing</a>
             <a href="#testimonials" className="text-sm font-medium py-2" style={{ color: '#6b5c4c' }} onClick={() => setMobileMenuOpen(false)}>Reviews</a>
-            <button className="w-full py-3 rounded-lg text-sm font-semibold text-white" style={{ background: 'hsl(16 95% 52%)' }} onClick={onGetStarted}>
+            <button className="w-full py-3 rounded-lg text-sm font-semibold text-white" style={{ background: 'hsl(16 95% 52%)' }} onClick={goToCreate}>
               {user ? 'Open Creator' : 'Create Invoice Free'}
             </button>
           </div>
@@ -163,7 +157,7 @@ export default function LandingPage({ onGetStarted, onGoToRecurring, user, isPro
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <button className="flex items-center gap-2 px-8 py-4 rounded-xl text-base font-bold text-white transition-all hover:opacity-90 active:scale-[0.98]" style={{ background: 'hsl(16 95% 52%)', boxShadow: '0 8px 30px hsl(16 95% 52% / 0.4)' }} onClick={onGetStarted}>
+            <button className="flex items-center gap-2 px-8 py-4 rounded-xl text-base font-bold text-white transition-all hover:opacity-90 active:scale-[0.98]" style={{ background: 'hsl(16 95% 52%)', boxShadow: '0 8px 30px hsl(16 95% 52% / 0.4)' }} onClick={goToCreate}>
               Create Your First Invoice <ArrowRight size={18} />
             </button>
             <button className="flex items-center gap-2 px-8 py-4 rounded-xl text-base font-semibold border-2 transition-all hover:bg-orange-50 active:scale-[0.98]" style={{ color: 'hsl(16 95% 52%)', borderColor: 'hsl(16 95% 52%)' }} onClick={() => onUpgrade('pro')}>
@@ -306,7 +300,7 @@ export default function LandingPage({ onGetStarted, onGoToRecurring, user, isPro
                     boxShadow: highlight ? '0 4px 16px hsl(16 95% 52% / 0.3)' : 'none',
                   }}
                   onClick={() => {
-                    if (name === 'Free') { onGetStarted(); return }
+                    if (name === 'Free') { goToCreate(); return }
                     if ((name === 'Pro' && isPro && plan === 'pro') || (name === 'Agency' && plan === 'agency')) return
                     onUpgrade(name.toLowerCase() as 'pro' | 'agency')
                   }}
@@ -336,7 +330,7 @@ export default function LandingPage({ onGetStarted, onGoToRecurring, user, isPro
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-5" style={{ color: '#1a1208' }}>Start invoicing like a pro</h2>
           <p className="text-lg mb-8" style={{ color: '#6b5c4c' }}>Join 12,000+ freelancers who get paid faster with InvoiceFlow. No setup. No credit card.</p>
-          <button className="inline-flex items-center gap-2 px-10 py-5 rounded-2xl text-base font-bold text-white transition-all hover:opacity-90 active:scale-[0.98]" style={{ background: 'hsl(16 95% 52%)', boxShadow: '0 10px 40px hsl(16 95% 52% / 0.4)' }} onClick={onGetStarted}>
+          <button className="inline-flex items-center gap-2 px-10 py-5 rounded-2xl text-base font-bold text-white transition-all hover:opacity-90 active:scale-[0.98]" style={{ background: 'hsl(16 95% 52%)', boxShadow: '0 10px 40px hsl(16 95% 52% / 0.4)' }} onClick={goToCreate}>
             Create Your First Invoice <ArrowRight size={20} />
           </button>
           <p className="text-sm mt-4" style={{ color: '#9c8572' }}>Free forever · No credit card needed</p>

@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import InvoiceForm from '../components/invoice/InvoiceForm'
 import InvoicePreview from '../components/invoice/InvoicePreview'
 import { type InvoiceData, defaultInvoice } from '../types/invoice'
@@ -7,23 +8,27 @@ import {
   FileText, Sparkles, Crown, CheckCircle2, Lock, Loader2, RotateCcw
 } from 'lucide-react'
 import { toast } from '@blinkdotnew/ui'
-import type { User } from '@blinkdotnew/sdk'
-import type { Plan } from '../hooks/useSubscription'
 import { blink } from '../blink/client'
+import { useAppContext } from '../layouts/RootLayout'
 
-interface InvoiceCreatorProps {
-  onBack: () => void
-  user: User | null
-  isPro: boolean
-  isAgency: boolean
-  plan: Plan
-  onUpgrade: (p?: 'pro' | 'agency') => void
-  subLoading: boolean
-  seedInvoice?: InvoiceData | null
+// Read seed invoice from sessionStorage (set by RecurringInvoices)
+function getSeedInvoice(): InvoiceData | null {
+  try {
+    const raw = sessionStorage.getItem('invoiceflow-seed-invoice')
+    if (raw) {
+      sessionStorage.removeItem('invoiceflow-seed-invoice')
+      return JSON.parse(raw) as InvoiceData
+    }
+  } catch { /* ignore */ }
+  return null
 }
 
-export default function InvoiceCreator({ onBack, user, isPro, plan, onUpgrade, subLoading, seedInvoice }: InvoiceCreatorProps) {
+export default function InvoiceCreator() {
+  const { user, isPro, plan, onUpgrade, subLoading } = useAppContext()
+  const navigate = useNavigate()
+  const [seedInvoice] = useState<InvoiceData | null>(() => getSeedInvoice())
   const [invoice, setInvoice] = useState<InvoiceData>(seedInvoice ?? defaultInvoice)
+  const fromRecurring = !!seedInvoice
   const [showPreview, setShowPreview] = useState(false)
   const [generatingPdf, setGeneratingPdf] = useState(false)
   const printRef = useRef<HTMLDivElement>(null)
@@ -123,7 +128,7 @@ export default function InvoiceCreator({ onBack, user, isPro, plan, onUpgrade, s
         style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderColor: '#e8e0d8' }}
       >
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 rounded-lg hover:bg-orange-50 transition-colors" style={{ color: '#6b5c4c' }} aria-label="Back">
+          <button onClick={() => navigate({ to: '/' })} className="p-2 rounded-lg hover:bg-orange-50 transition-colors" style={{ color: '#6b5c4c' }} aria-label="Back">
             <ArrowLeft size={18} />
           </button>
           <div className="flex items-center gap-2">
@@ -137,7 +142,7 @@ export default function InvoiceCreator({ onBack, user, isPro, plan, onUpgrade, s
           <div className="hidden md:block h-5 border-l" style={{ borderColor: '#e8e0d8' }} />
           <div className="hidden md:flex items-center gap-2">
             <span className="hidden md:block text-sm" style={{ color: '#9c8572' }}>
-              {seedInvoice ? (
+              {fromRecurring ? (
                 <span className="flex items-center gap-1.5">
                   <RotateCcw size={12} />
                   From recurring template

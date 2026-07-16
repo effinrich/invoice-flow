@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import {
   ArrowLeft, Plus, RefreshCw, Pause, Play, Trash2, Edit2,
   FileText, Calendar, Crown, AlertCircle, Sparkles, RotateCcw,
@@ -6,7 +7,6 @@ import {
 } from 'lucide-react'
 import { Button, toast } from '@blinkdotnew/ui'
 import { cn } from '../lib/utils'
-import type { User } from '@blinkdotnew/sdk'
 import type { RecurringInvoice } from '../types/recurring'
 import { FREQUENCY_LABELS, daysUntil, buildInvoiceFromTemplate } from '../types/recurring'
 import type { InvoiceData } from '../types/invoice'
@@ -14,15 +14,7 @@ import { calculateTotals, formatCurrency } from '../types/invoice'
 import { useRecurringInvoices } from '../hooks/useRecurringInvoices'
 import { useGeneratedInvoices } from '../hooks/useGeneratedInvoices'
 import { RecurringInvoiceModal } from '../components/recurring/RecurringInvoiceModal'
-
-interface Props {
-  onBack: () => void
-  onGenerateInvoice: (data: InvoiceData) => void
-  onViewPortal: (invoiceId: string) => void
-  user: User | null
-  isPro: boolean
-  onUpgrade: (p?: 'pro' | 'agency') => void
-}
+import { useAppContext } from '../layouts/RootLayout'
 
 function formatDate(dateStr: string) {
   try {
@@ -202,7 +194,9 @@ const PRO_FEATURES: Array<{ label: string; Icon: React.ElementType }> = [
   { label: 'One-click invoice generation', Icon: RefreshCw },
 ]
 
-export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isPro, onUpgrade }: Props) {
+export default function RecurringInvoices() {
+  const { user, isPro, onUpgrade } = useAppContext()
+  const navigate = useNavigate()
   const { items, isLoading, create, update, remove, toggleStatus, markGenerated, isCreating, isUpdating } = useRecurringInvoices(user?.id ?? null)
   const [modalOpen, setModalOpen] = useState(false)
   const [editing, setEditing] = useState<RecurringInvoice | null>(null)
@@ -230,7 +224,8 @@ export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isP
     toast.success(`Invoice generated for ${item.clientName}`, {
       description: `${invoiceNumber} · Opens in invoice creator`,
     })
-    onGenerateInvoice(invoiceData)
+    sessionStorage.setItem('invoiceflow-seed-invoice', JSON.stringify(invoiceData))
+    navigate({ to: '/create' })
   }
 
   const handleDelete = async (id: string) => {
@@ -252,7 +247,7 @@ export default function RecurringInvoices({ onBack, onGenerateInvoice, user, isP
           <Button
             variant="ghost"
             size="icon"
-            onClick={onBack}
+            onClick={() => navigate({ to: '/' })}
             className="rounded-lg text-muted-foreground hover:bg-accent"
             aria-label="Back"
           >
