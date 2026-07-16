@@ -239,6 +239,12 @@ input[type='number'] {
     border-radius: 0 !important;
   }
 
+  /* Hide toast / notification overlays in print (Sonner) */
+  [data-sonner-toasts],
+  [data-sonner-toast] {
+    display: none !important;
+  }
+
   /* Remove shadows in print */
   * {
     box-shadow: none !important;
