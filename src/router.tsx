@@ -2,6 +2,7 @@ import {
   createRouter,
   createRoute,
   createRootRoute,
+  createHashHistory,
   redirect,
 } from '@tanstack/react-router'
 import { lazy } from 'react'
@@ -62,7 +63,10 @@ const routeTree = rootRoute.addChildren([
   catchAllRoute,
 ])
 
-export const router = createRouter({ routeTree })
+export const router = createRouter({
+  routeTree,
+  history: createHashHistory(),
+})
 
 // Type-safety for the router
 declare module '@tanstack/react-router' {
