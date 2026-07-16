@@ -81,24 +81,6 @@ export const STRIPE_CONFIG = {
   },
 }
 
-export async function createCheckoutUrl(
-  plan: 'pro' | 'agency',
-  userEmail: string,
-  userId: string,
-  successUrl: string
-): Promise<string> {
-  const config = STRIPE_CONFIG[plan]
-  const params = new URLSearchParams({
-    price: config.priceId,
-    prefilled_email: userEmail,
-    client_reference_id: userId,
-    success_url: successUrl,
-    cancel_url: window.location.href,
-    allow_promotion_codes: 'true',
-  })
-  return `https://buy.stripe.com/checkout?${params.toString()}`
-}
-
 // Record a subscription locally after Stripe redirects back
 export async function recordSubscription(
   userId: string,

@@ -1,6 +1,10 @@
-import { X, CheckCircle2, Sparkles, ExternalLink } from 'lucide-react'
+import { X, CheckCircle2, Sparkles, ExternalLink, Loader2 } from 'lucide-react'
+import { useState } from 'react'
 import { STRIPE_CONFIG } from '../hooks/useSubscription'
+import { toast } from '@blinkdotnew/ui'
 import type { User } from '@blinkdotnew/sdk'
+
+const STRIPE_PK = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_live_51Sd6Rl9TUspFE5VHrmYOFHyJvqtI1r03oyVniQkoHEEQxdj4rCPMHbQorj7aQKsDVEEq88Z2rdyvy80co7VZ2vMX004Iv4mQKL'
 
 interface UpgradeModalProps {
   open: boolean
@@ -52,35 +56,47 @@ export function UpgradeModal({
   defaultPlan = 'pro',
   onLoginRequired,
 }: UpgradeModalProps) {
+  const [loading, setLoading] = useState(false)
+
   if (!open) return null
 
-  const handleUpgrade = (plan: 'pro' | 'agency') => {
+  const handleUpgrade = async (plan: 'pro' | 'agency') => {
     if (!user) {
       onLoginRequired()
       return
     }
 
-    const config = STRIPE_CONFIG[plan]
-    const successUrl = `${window.location.origin}${window.location.pathname}?upgraded=${plan}&session_id={CHECKOUT_SESSION_ID}`
+    setLoading(true)
+    try {
+      const { loadStripe } = await import('@stripe/stripe-js')
+      const stripe = await loadStripe(STRIPE_PK)
+      if (!stripe) {
+        toast.error('Payment system failed to load. Please try again.')
+        setLoading(false)
+        return
+      }
 
-    // Build Stripe Payment Link URL with pre-filled email
-    const baseUrl = `https://buy.stripe.com/`
-    
-    // We'll use Stripe Checkout hosted page via the price ID
-    // Since we're on starter tier (no backend), use Payment Links approach
-    // Build a direct checkout URL
-    const params = new URLSearchParams({
-      prefilled_email: user.email || '',
-      client_reference_id: user.id,
-      success_url: successUrl,
-      cancel_url: window.location.href,
-    })
+      const config = STRIPE_CONFIG[plan]
+      const origin = window.location.origin + window.location.pathname
 
-    // Use Stripe's hosted checkout with price parameter
-    const checkoutUrl = `https://checkout.stripe.com/pay/${config.priceId}?${params.toString()}`
-    
-    window.open(checkoutUrl, '_blank', 'noopener,noreferrer')
-    onClose()
+      const result = await stripe.redirectToCheckout({
+        lineItems: [{ price: config.priceId, quantity: 1 }],
+        mode: 'subscription',
+        customerEmail: user.email || undefined,
+        clientReferenceId: user.id,
+        successUrl: `${origin}?upgraded=${plan}&session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${origin}`,
+      })
+
+      if (result.error) {
+        toast.error(result.error.message || 'Checkout failed')
+        setLoading(false)
+      }
+    } catch (err) {
+      console.error('Stripe checkout error:', err)
+      toast.error('Something went wrong. Please try again.')
+      setLoading(false)
+    }
   }
 
   const plan = planDetails[defaultPlan]
@@ -151,8 +167,13 @@ export function UpgradeModal({
               background: 'hsl(16 95% 52%)',
               boxShadow: '0 8px 24px hsl(16 95% 52% / 0.35)',
             }}
+            disabled={loading}
           >
-            <ExternalLink size={16} />
+            {loading ? (
+              <Loader2 className="animate-spin" size={16} />
+            ) : (
+              <ExternalLink size={16} />
+            )}
             {user ? `Subscribe to ${plan.name}` : 'Sign in to subscribe'}
           </button>
 
@@ -164,7 +185,7 @@ export function UpgradeModal({
 
           {user && (
             <p className="text-center text-xs" style={{ color: '#9c8572' }}>
-              Opens Stripe checkout in a new tab. Use promo code{' '}
+              You'll be redirected to Stripe checkout. Use promo code{' '}
               <span
                 className="font-bold px-1 rounded"
                 style={{ background: 'hsl(16 95% 96%)', color: 'hsl(16 80% 35%)' }}
@@ -186,6 +207,7 @@ export function UpgradeModal({
               onClick={() => handleUpgrade('agency')}
               className="mt-4 text-xs underline"
               style={{ color: '#9c8572' }}
+              disabled={loading}
             >
               View Agency plan ($29/mo) →
             </button>
