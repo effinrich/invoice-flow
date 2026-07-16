@@ -32,6 +32,9 @@ export interface RecurringInvoice {
   invoiceCount: number
   // Stripe
   stripePaymentLinkUrl: string | null
+  // Auto-email
+  autoEmailEnabled: boolean
+  daysBefore: number
   // Meta
   createdAt: string
   updatedAt: string
@@ -59,6 +62,8 @@ export interface RecurringInvoiceRow {
   next_due_date: string
   last_generated_at: string | null
   invoice_count: number
+  auto_email_enabled: number  // 0 or 1 (SQLite)
+  days_before_due: number
   created_at: string
   updated_at: string
 }
