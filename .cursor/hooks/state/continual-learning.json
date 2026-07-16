@@ -1,8 +1,8 @@
 {
   "version": 1,
   "lastRunAtMs": 0,
-  "turnsSinceLastRun": 0,
+  "turnsSinceLastRun": 1,
   "lastTranscriptMtimeMs": null,
-  "lastProcessedGenerationId": "36610c8a-e7b6-40ec-80c9-ae3797404004",
+  "lastProcessedGenerationId": "886e0062-6fde-4106-b539-809c28b96def",
   "trialStartedAtMs": null
 }
