@@ -4,7 +4,8 @@ import { STRIPE_CONFIG } from '../hooks/useSubscription'
 import { toast } from '@blinkdotnew/ui'
 import type { User } from '@blinkdotnew/sdk'
 
-const STRIPE_PK = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_live_51Sd6Rl9TUspFE5VHrmYOFHyJvqtI1r03oyVniQkoHEEQxdj4rCPMHbQorj7aQKsDVEEq88Z2rdyvy80co7VZ2vMX004Iv4mQKL'
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 interface UpgradeModalProps {
   open: boolean
@@ -68,33 +69,34 @@ export function UpgradeModal({
 
     setLoading(true)
     try {
-      const { loadStripe } = await import('@stripe/stripe-js')
-      const stripe = await loadStripe(STRIPE_PK)
-      if (!stripe) {
-        toast.error('Payment system failed to load. Please try again.')
-        setLoading(false)
-        return
-      }
-
       const config = STRIPE_CONFIG[plan]
       const origin = window.location.origin + window.location.pathname
 
-      const result = await stripe.redirectToCheckout({
-        lineItems: [{ price: config.priceId, quantity: 1 }],
-        mode: 'subscription',
-        customerEmail: user.email || undefined,
-        clientReferenceId: user.id,
-        successUrl: `${origin}?upgraded=${plan}&session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${origin}`,
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/stripe-checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          priceId: config.priceId,
+          userId: user.id,
+          email: user.email || '',
+          successUrl: `${origin}?upgraded=${plan}&session_id={CHECKOUT_SESSION_ID}`,
+          cancelUrl: origin,
+        }),
       })
 
-      if (result.error) {
-        toast.error(result.error.message || 'Checkout failed')
-        setLoading(false)
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}))
+        throw new Error(errBody.error || 'Failed to create checkout session')
       }
+
+      const { url } = await res.json()
+      window.location.href = url
     } catch (err) {
       console.error('Stripe checkout error:', err)
-      toast.error('Something went wrong. Please try again.')
+      toast.error(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
       setLoading(false)
     }
   }
