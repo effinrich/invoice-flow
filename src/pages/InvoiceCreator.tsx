@@ -216,7 +216,7 @@ export default function InvoiceCreator({ onBack, user, isPro, plan, onUpgrade, s
       <div className="flex-1 flex overflow-hidden">
         {/* Form panel */}
         <div
-          className={`${showPreview ? 'hidden md:flex' : 'flex'} flex-col w-full md:w-[480px] lg:w-[520px] xl:w-[560px] border-r overflow-y-auto`}
+          className={`${showPreview ? 'hidden md:flex' : 'flex'} flex-col w-full md:w-[480px] lg:w-[520px] xl:w-[560px] border-r overflow-y-auto no-print`}
           style={{ borderColor: '#e8e0d8', background: '#fff' }}
         >
           <InvoiceForm invoice={invoice} onChange={setInvoice} isPro={isPro} onUpgrade={onUpgrade} />
@@ -224,7 +224,7 @@ export default function InvoiceCreator({ onBack, user, isPro, plan, onUpgrade, s
 
         {/* Preview panel */}
         <div
-          className={`${showPreview ? 'flex' : 'hidden md:flex'} flex-col flex-1 overflow-y-auto items-center p-6 md:p-10`}
+          className={`${showPreview ? 'flex' : 'hidden md:flex'} flex-col flex-1 overflow-y-auto items-center p-6 md:p-10 print:w-full print:max-w-none print:p-0 print:items-start`}
           style={{ background: '#f0ece8' }}
         >
           {/* The invoice — captured by html2canvas for Pro PDF */}

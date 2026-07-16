@@ -195,7 +195,8 @@ input[type='number'] {
 @media print {
   /* Hide all app chrome — only the invoice renders */
   .no-print,
-  header {
+  header,
+  .no-print * {
     display: none !important;
   }
 
@@ -205,6 +206,12 @@ input[type='number'] {
     background: #fff !important;
   }
 
+  /* Preview panel fills the page in print */
+  .flex-1.flex {
+    display: flex !important;
+    width: 100% !important;
+  }
+
   /* The preview panel: reset layout so invoice fills the page */
   .print\:max-w-none {
     max-width: none !important;
@@ -212,6 +219,14 @@ input[type='number'] {
 
   .print\:w-full {
     width: 100% !important;
+  }
+
+  .print\:p-0 {
+    padding: 0 !important;
+  }
+
+  .print\:items-start {
+    align-items: flex-start !important;
   }
 
   .print\:rounded-none {
