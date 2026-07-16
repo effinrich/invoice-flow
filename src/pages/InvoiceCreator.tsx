@@ -224,7 +224,7 @@ export default function InvoiceCreator({ onBack, user, isPro, plan, onUpgrade, s
 
         {/* Preview panel */}
         <div
-          className={`${showPreview ? 'flex' : 'hidden md:flex'} flex-col flex-1 overflow-y-auto items-center p-6 md:p-10 print:w-full print:max-w-none print:p-0 print:items-start`}
+          className={`${showPreview ? 'flex' : 'hidden md:flex'} flex-col flex-1 overflow-y-auto items-center p-6 md:p-10 invoice-print-area`}
           style={{ background: '#f0ece8' }}
         >
           {/* The invoice — captured by html2canvas for Pro PDF */}

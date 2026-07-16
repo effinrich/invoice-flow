@@ -193,40 +193,46 @@ input[type='number'] {
 
 /* Print styles for invoice */
 @media print {
-  /* Hide all app chrome — only the invoice renders */
-  .no-print,
-  header,
-  .no-print * {
+  /* Hide form panel and app chrome — only the invoice renders */
+  .no-print {
     display: none !important;
   }
 
-  /* Force white background, remove backgrounds from layout wrappers */
+  /* Force white background everywhere */
   body,
   html {
     background: #fff !important;
   }
 
-  /* Preview panel fills the page in print */
-  .flex-1.flex {
-    display: flex !important;
+  /* Reset overflow on layout wrappers so content isn't clipped */
+  .flex.overflow-hidden {
+    overflow: visible !important;
+    display: block !important;
     width: 100% !important;
   }
 
-  /* The preview panel: reset layout so invoice fills the page */
+  /* Preview panel: show and fill page width in print */
+  .invoice-print-area {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    background: #fff !important;
+    overflow: visible !important;
+  }
+
+  /* Invoice card itself */
+  .invoice-print-area > div {
+    max-width: none !important;
+    width: 100% !important;
+  }
+
   .print\:max-w-none {
     max-width: none !important;
   }
 
   .print\:w-full {
     width: 100% !important;
-  }
-
-  .print\:p-0 {
-    padding: 0 !important;
-  }
-
-  .print\:items-start {
-    align-items: flex-start !important;
   }
 
   .print\:rounded-none {
