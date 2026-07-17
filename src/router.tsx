@@ -2,13 +2,13 @@ import {
   createRouter,
   createRoute,
   createRootRoute,
-  redirect,
 } from '@tanstack/react-router'
 import { lazy } from 'react'
 import { RootLayout } from './layouts/RootLayout'
 import LandingPage from './pages/LandingPage'
 import InvoiceCreator from './pages/InvoiceCreator'
 import RecurringInvoices from './pages/RecurringInvoices'
+import NotFound from './pages/NotFound'
 
 const ClientPortal = lazy(() => import('./pages/ClientPortal').then(m => ({ default: m.ClientPortal || m.default })))
 
@@ -45,13 +45,12 @@ const portalRoute = createRoute({
   component: ClientPortal,
 })
 
-// Catch-all redirect to /
+// Catch-all: render a proper Not Found page (with noindex) rather than
+// redirecting unknown URLs to "/", which reads as a soft 404 to search engines.
 const catchAllRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '*',
-  beforeLoad: () => {
-    throw redirect({ to: '/' })
-  },
+  component: NotFound,
 })
 
 const routeTree = rootRoute.addChildren([
