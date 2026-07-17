@@ -2,6 +2,7 @@ import {
   createRouter,
   createRoute,
   createRootRoute,
+  createHashHistory,
 } from '@tanstack/react-router'
 import { lazy } from 'react'
 import { RootLayout } from './layouts/RootLayout'
@@ -10,7 +11,7 @@ import InvoiceCreator from './pages/InvoiceCreator'
 import RecurringInvoices from './pages/RecurringInvoices'
 import NotFound from './pages/NotFound'
 
-const ClientPortal = lazy(() => import('./pages/ClientPortal').then(m => ({ default: m.ClientPortal || m.default })))
+const ClientPortal = lazy(() => import('./pages/ClientPortal'))
 
 // Root layout route — wraps all pages with auth/subscription + upgrade modal
 const rootRoute = createRootRoute({
@@ -61,7 +62,10 @@ const routeTree = rootRoute.addChildren([
   catchAllRoute,
 ])
 
-export const router = createRouter({ routeTree })
+export const router = createRouter({
+  routeTree,
+  history: createHashHistory(),
+})
 
 // Type-safety for the router
 declare module '@tanstack/react-router' {

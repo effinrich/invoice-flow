@@ -71,6 +71,7 @@ export default function LandingPage() {
             <a href="#features" className="text-sm font-medium" style={{ color: '#6b5c4c' }}>Features</a>
             <a href="#pricing" className="text-sm font-medium" style={{ color: '#6b5c4c' }}>Pricing</a>
             <a href="#testimonials" className="text-sm font-medium" style={{ color: '#6b5c4c' }}>Reviews</a>
+            <a href="#faq" className="text-sm font-medium" style={{ color: '#6b5c4c' }}>FAQ</a>
             {user && (
               <button
                 onClick={goToRecurring}
@@ -123,6 +124,7 @@ export default function LandingPage() {
             <a href="#features" className="text-sm font-medium py-2" style={{ color: '#6b5c4c' }} onClick={() => setMobileMenuOpen(false)}>Features</a>
             <a href="#pricing" className="text-sm font-medium py-2" style={{ color: '#6b5c4c' }} onClick={() => setMobileMenuOpen(false)}>Pricing</a>
             <a href="#testimonials" className="text-sm font-medium py-2" style={{ color: '#6b5c4c' }} onClick={() => setMobileMenuOpen(false)}>Reviews</a>
+            <a href="#faq" className="text-sm font-medium py-2" style={{ color: '#6b5c4c' }} onClick={() => setMobileMenuOpen(false)}>FAQ</a>
             <button className="w-full py-3 rounded-lg text-sm font-semibold text-white" style={{ background: 'hsl(16 95% 52%)' }} onClick={goToCreate}>
               {user ? 'Open Creator' : 'Create Invoice Free'}
             </button>
@@ -255,6 +257,33 @@ export default function LandingPage() {
                   <div><p className="text-sm font-bold" style={{ color: '#1a1208' }}>{name}</p><p className="text-xs" style={{ color: '#9c8572' }}>{role}</p></div>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="py-24 px-6 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4" style={{ color: '#1a1208' }}>Frequently asked questions</h2>
+            <p className="text-lg" style={{ color: '#6b5c4c' }}>Everything you need to know about InvoiceFlow</p>
+          </div>
+          <div className="space-y-6">
+            {[
+              { q: 'How long does it take to create an invoice?', a: 'Most freelancers create a complete, professional invoice in under 60 seconds using InvoiceFlow\'s intuitive form with live preview.' },
+              { q: 'Is InvoiceFlow really free?', a: 'Yes. The free plan includes 5 invoices per month with PDF download via browser print dialog. No credit card required to sign up.' },
+              { q: 'Can I add my company logo and branding?', a: 'Pro and Agency plan subscribers can upload a custom logo and set brand accent colors that appear on every invoice for a professional, branded look.' },
+              { q: 'Does InvoiceFlow support recurring invoices?', a: 'Yes. Pro plan users can set up weekly, monthly, quarterly, or annual recurring invoice schedules with one-click generation and due date tracking.' },
+              { q: 'What payment methods do you accept?', a: 'InvoiceFlow uses Stripe for secure payment processing. You can pay with any major credit or debit card.' },
+            ].map(({ q, a }) => (
+              <details key={q} className="group rounded-2xl border" style={{ borderColor: '#e8e0d8' }}>
+                <summary className="flex items-center justify-between cursor-pointer p-6 text-base font-bold" style={{ color: '#1a1208' }}>
+                  {q}
+                  <span className="ml-4 shrink-0 transition-transform group-open:rotate-45" style={{ color: 'hsl(16 95% 52%)' }}>+</span>
+                </summary>
+                <p className="px-6 pb-6 text-sm leading-relaxed" style={{ color: '#6b5c4c' }}>{a}</p>
+              </details>
             ))}
           </div>
         </div>
