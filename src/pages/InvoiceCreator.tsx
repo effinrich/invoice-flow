@@ -18,7 +18,6 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { toast } from "@blinkdotnew/ui";
-import { blink } from "../blink/client";
 import { useAppContext } from "../layouts/RootLayout";
 
 // Read seed invoice from sessionStorage (set by RecurringInvoices)
@@ -36,7 +35,7 @@ function getSeedInvoice(): InvoiceData | null {
 }
 
 export default function InvoiceCreator() {
-  const { user, isPro, plan, onUpgrade, subLoading } = useAppContext();
+  const { user, isPro, plan, onUpgrade, subLoading, onLogin } = useAppContext();
   const navigate = useNavigate();
   const [seedInvoice] = useState<InvoiceData | null>(() => getSeedInvoice());
   const [invoice, setInvoice] = useState<InvoiceData>(seedInvoice ?? defaultInvoice);
@@ -44,10 +43,6 @@ export default function InvoiceCreator() {
   const [showPreview, setShowPreview] = useState(false);
   const [generatingPdf, setGeneratingPdf] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
-
-  const handleLoginToUpgrade = () => {
-    blink.auth.login(window.location.href + "?upgrade=1");
-  };
 
   // Pro: generate a real PDF file, no browser dialog
   const handleProDownload = async () => {
@@ -182,7 +177,7 @@ export default function InvoiceCreator() {
               </span>
             ) : (
               <button
-                onClick={() => (user ? onUpgrade("pro") : handleLoginToUpgrade())}
+                onClick={() => (user ? onUpgrade("pro") : onLogin())}
                 className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all hover:bg-orange-50 text-primary border-primary"
               >
                 <Sparkles size={11} />
@@ -298,7 +293,7 @@ export default function InvoiceCreator() {
                   ))}
                 </div>
                 <button
-                  onClick={() => (user ? onUpgrade("pro") : handleLoginToUpgrade())}
+                  onClick={() => (user ? onUpgrade("pro") : onLogin())}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 active:scale-[0.98] bg-primary"
                   style={{ boxShadow: "0 4px 14px hsl(16 95% 52% / 0.3)" }}
                 >

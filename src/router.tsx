@@ -76,8 +76,9 @@ const invoicesRoute = createRoute({
   component: InvoiceDashboard,
 });
 
+// Public: the free-tier invoice creator — no account required (per README).
 const createRoute_ = createRoute({
-  getParentRoute: () => appRoute,
+  getParentRoute: () => publicRoute,
   path: "/create",
   component: InvoiceCreator,
 });
@@ -102,8 +103,8 @@ const catchAllRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
-  publicRoute.addChildren([indexRoute, portalRoute]),
-  appRoute.addChildren([invoicesRoute, createRoute_, recurringRoute, settingsRoute]),
+  publicRoute.addChildren([indexRoute, createRoute_, portalRoute]),
+  appRoute.addChildren([invoicesRoute, recurringRoute, settingsRoute]),
   catchAllRoute,
 ]);
 

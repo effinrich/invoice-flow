@@ -3,6 +3,7 @@ import { Outlet } from "@tanstack/react-router";
 import { useAuth, signOut } from "../hooks/useAuth";
 import { useSubscription, recordSubscription } from "../hooks/useSubscription";
 import { UpgradeModal } from "../components/UpgradeModal";
+import { SignInModal } from "../components/SignInModal";
 import { toast } from "@blinkdotnew/ui";
 import type { Plan } from "../hooks/useSubscription";
 import type { User } from "@supabase/supabase-js";
@@ -29,6 +30,7 @@ export function useAppContext(): AppContext {
 export function RootLayout() {
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [upgradePlan, setUpgradePlan] = useState<"pro" | "agency">("pro");
+  const [signInOpen, setSignInOpen] = useState(false);
 
   const { user, isLoading: authLoading } = useAuth();
   const {
@@ -87,10 +89,7 @@ export function RootLayout() {
     plan,
     subLoading,
     onUpgrade: handleOpenUpgrade,
-    onLogin: () => {
-      setUpgradePlan("pro");
-      setUpgradeOpen(true);
-    },
+    onLogin: () => setSignInOpen(true),
     onLogout: () => signOut(),
   };
 
@@ -103,10 +102,11 @@ export function RootLayout() {
         user={user}
         defaultPlan={upgradePlan}
         onLoginRequired={() => {
-          setUpgradePlan("pro");
-          setUpgradeOpen(true);
+          setUpgradeOpen(false);
+          setSignInOpen(true);
         }}
       />
+      <SignInModal open={signInOpen} onClose={() => setSignInOpen(false)} />
     </AppContextInstance.Provider>
   );
 }

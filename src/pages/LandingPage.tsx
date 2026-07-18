@@ -94,6 +94,11 @@ export default function LandingPage() {
 
   const goToCreate = () => navigate({ to: "/create" });
   const goToRecurring = () => navigate({ to: "/recurring" });
+  // Hash-history router owns the URL hash, so native `href="#id"` anchors trigger
+  // a (non-existent) route instead of scrolling. Scroll the element directly.
+  const scrollToId = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const plans = [
     {
@@ -169,16 +174,44 @@ export default function LandingPage() {
           </div>
 
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm font-medium text-foreground">
+            <a
+              href="#features"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId("features");
+              }}
+              className="text-sm font-medium text-foreground"
+            >
               Features
             </a>
-            <a href="#pricing" className="text-sm font-medium text-foreground">
+            <a
+              href="#pricing"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId("pricing");
+              }}
+              className="text-sm font-medium text-foreground"
+            >
               Pricing
             </a>
-            <a href="#testimonials" className="text-sm font-medium text-foreground">
+            <a
+              href="#testimonials"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId("testimonials");
+              }}
+              className="text-sm font-medium text-foreground"
+            >
               Reviews
             </a>
-            <a href="#faq" className="text-sm font-medium text-foreground">
+            <a
+              href="#faq"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId("faq");
+              }}
+              className="text-sm font-medium text-foreground"
+            >
               FAQ
             </a>
             {user && (
@@ -257,28 +290,44 @@ export default function LandingPage() {
             <a
               href="#features"
               className="text-sm font-medium py-2 text-foreground"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId("features");
+                setMobileMenuOpen(false);
+              }}
             >
               Features
             </a>
             <a
               href="#pricing"
               className="text-sm font-medium py-2 text-foreground"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId("pricing");
+                setMobileMenuOpen(false);
+              }}
             >
               Pricing
             </a>
             <a
               href="#testimonials"
               className="text-sm font-medium py-2 text-foreground"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId("testimonials");
+                setMobileMenuOpen(false);
+              }}
             >
               Reviews
             </a>
             <a
               href="#faq"
               className="text-sm font-medium py-2 text-foreground"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId("faq");
+                setMobileMenuOpen(false);
+              }}
             >
               FAQ
             </a>
