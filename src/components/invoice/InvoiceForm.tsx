@@ -42,17 +42,9 @@ function InputField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="px-3 py-2.5 rounded-xl text-sm border border-border bg-background text-foreground outline-none transition-all focus:ring-2"
+        className="px-3 py-2.5 rounded-xl text-sm border border-border bg-background text-foreground outline-none transition-all focus:border-primary focus:ring-[3px] focus:ring-[hsl(16_95%_52%_/_0.15)]"
         style={{
           fontFamily: "inherit",
-        }}
-        onFocus={(e) => {
-          e.target.style.borderColor = "hsl(16 95% 52%)";
-          e.target.style.boxShadow = "0 0 0 3px hsl(16 95% 52% / 0.15)";
-        }}
-        onBlur={(e) => {
-          e.target.style.borderColor = "#e8e0d8";
-          e.target.style.boxShadow = "none";
         }}
       />
     </div>
@@ -196,27 +188,19 @@ export default function InvoiceForm({
           {invoice.lineItems.map((item) => (
             <div key={item.id} className="grid grid-cols-12 gap-2 items-center">
               <input
-                className="col-span-6 px-2.5 py-2 rounded-xl text-sm border border-border bg-background text-foreground outline-none"
+                className="col-span-6 px-2.5 py-2 rounded-xl text-sm border border-border bg-background text-foreground outline-none focus:border-primary focus:ring-[3px] focus:ring-[hsl(16_95%_52%_/_0.15)]"
                 style={{
                   fontFamily: "inherit",
                 }}
                 placeholder="Service description"
                 value={item.description}
                 onChange={(e) => updateLineItem(item.id, { description: e.target.value })}
-                onFocus={(e) => {
-                  e.target.style.borderColor = "hsl(16 95% 52%)";
-                  e.target.style.boxShadow = "0 0 0 3px hsl(16 95% 52% / 0.15)";
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = "#e8e0d8";
-                  e.target.style.boxShadow = "none";
-                }}
               />
               <input
                 type="number"
                 min="0"
                 step="1"
-                className="col-span-2 px-2 py-2 rounded-xl text-sm border border-border bg-background text-foreground text-center outline-none"
+                className="col-span-2 px-2 py-2 rounded-xl text-sm border border-border bg-background text-foreground text-center outline-none focus:border-primary focus:ring-[3px] focus:ring-[hsl(16_95%_52%_/_0.15)]"
                 style={{
                   fontFamily: "inherit",
                 }}
@@ -224,34 +208,18 @@ export default function InvoiceForm({
                 onChange={(e) =>
                   updateLineItem(item.id, { quantity: parseFloat(e.target.value) || 0 })
                 }
-                onFocus={(e) => {
-                  e.target.style.borderColor = "hsl(16 95% 52%)";
-                  e.target.style.boxShadow = "0 0 0 3px hsl(16 95% 52% / 0.15)";
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = "#e8e0d8";
-                  e.target.style.boxShadow = "none";
-                }}
               />
               <input
                 type="number"
                 min="0"
                 step="0.01"
-                className="col-span-3 px-2 py-2 rounded-xl text-sm border border-border bg-background text-foreground text-right outline-none"
+                className="col-span-3 px-2 py-2 rounded-xl text-sm border border-border bg-background text-foreground text-right outline-none focus:border-primary focus:ring-[3px] focus:ring-[hsl(16_95%_52%_/_0.15)]"
                 style={{
                   fontFamily: "inherit",
                 }}
                 placeholder="0.00"
                 value={item.rate || ""}
                 onChange={(e) => updateLineItem(item.id, { rate: parseFloat(e.target.value) || 0 })}
-                onFocus={(e) => {
-                  e.target.style.borderColor = "hsl(16 95% 52%)";
-                  e.target.style.boxShadow = "0 0 0 3px hsl(16 95% 52% / 0.15)";
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = "#e8e0d8";
-                  e.target.style.boxShadow = "none";
-                }}
               />
               <button
                 onClick={() => removeLineItem(item.id)}
@@ -304,17 +272,9 @@ export default function InvoiceForm({
           onChange={(e) => update({ notes: e.target.value })}
           rows={3}
           placeholder="Payment due within 30 days. Thank you for your business!"
-          className="w-full px-3 py-2.5 rounded-xl text-sm border border-border bg-background text-foreground outline-none resize-none"
+          className="w-full px-3 py-2.5 rounded-xl text-sm border border-border bg-background text-foreground outline-none resize-none focus:border-primary focus:ring-[3px] focus:ring-[hsl(16_95%_52%_/_0.15)]"
           style={{
             fontFamily: "inherit",
-          }}
-          onFocus={(e) => {
-            e.target.style.borderColor = "hsl(16 95% 52%)";
-            e.target.style.boxShadow = "0 0 0 3px hsl(16 95% 52% / 0.15)";
-          }}
-          onBlur={(e) => {
-            e.target.style.borderColor = "#e8e0d8";
-            e.target.style.boxShadow = "none";
           }}
         />
       </FormSection>

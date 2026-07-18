@@ -43,11 +43,11 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/node": "^24",
     "autoprefixer": "10.4.16",
     "glob": "^13.0.6",
     "oxfmt": "^0.59.0",
     "oxlint": "^1.74.0",
-    "path": "^0.12.7",
     "postcss": "8.5.10",
     "stylelint": "^17.7.0",
     "stylelint-config-standard": "^40.0.0",

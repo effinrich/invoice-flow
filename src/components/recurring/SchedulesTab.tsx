@@ -202,15 +202,7 @@ function RecurringCard({
         </button>
         <button
           onClick={onDelete}
-          className="w-10 h-10 flex items-center justify-center rounded-xl border transition-colors hover:bg-red-50 border-border text-muted-foreground"
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = "#dc2626";
-            e.currentTarget.style.borderColor = "#fca5a5";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = "#9c8572";
-            e.currentTarget.style.borderColor = "#e8e0d8";
-          }}
+          className="w-10 h-10 flex items-center justify-center rounded-xl border transition-colors hover:bg-red-50 border-border text-muted-foreground hover:text-destructive hover:border-red-300"
         >
           <Trash2 size={14} />
         </button>

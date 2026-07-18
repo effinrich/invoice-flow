@@ -137,9 +137,7 @@ export function BrandingSection({
                   <button
                     type="button"
                     onClick={() => onLogoUrlChange(null)}
-                    className="flex items-center gap-1 text-xs transition-colors text-muted-foreground"
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#dc2626")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#9c8572")}
+                    className="flex items-center gap-1 text-xs transition-colors text-muted-foreground hover:text-destructive"
                   >
                     <X size={11} />
                     Remove logo

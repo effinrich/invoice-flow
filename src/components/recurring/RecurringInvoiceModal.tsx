@@ -339,9 +339,7 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
                   <button
                     onClick={() => removeLineItem(li.id)}
                     disabled={lineItems.length <= 1}
-                    className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors disabled:opacity-30 text-muted-foreground"
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "#fef0eb")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                    className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors disabled:opacity-30 text-muted-foreground hover:bg-[#fef0eb]"
                   >
                     <Trash2 size={13} />
                   </button>
@@ -351,9 +349,7 @@ export function RecurringInvoiceModal({ open, onClose, onSave, initial, userId, 
 
             <button
               onClick={addLineItem}
-              className="flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-lg transition-colors text-primary"
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#fef0eb")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+              className="flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-lg transition-colors text-primary hover:bg-[#fef0eb]"
             >
               <Plus size={14} /> Add line item
             </button>
