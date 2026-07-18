@@ -20,24 +20,24 @@ For product, pricing, and business context, see [`INVOICEFLOW.md`](./INVOICEFLOW
 
 ## Tech stack
 
-| Layer | Technology |
-|---|---|
-| App | React + Vite + TypeScript |
-| Routing | TanStack Router |
-| Styling | Tailwind CSS + `@blinkdotnew/ui` |
-| Auth / DB | Blink SDK (`@blinkdotnew/sdk`) |
-| Payments | Stripe (+ Supabase Edge Function for checkout) |
-| PDF | `jspdf`, `html2canvas` |
-| Forms | React Hook Form + Zod |
+| Layer     | Technology                                     |
+| --------- | ---------------------------------------------- |
+| App       | React + Vite + TypeScript                      |
+| Routing   | TanStack Router                                |
+| Styling   | Tailwind CSS + `@blinkdotnew/ui`               |
+| Auth / DB | Blink SDK (`@blinkdotnew/sdk`)                 |
+| Payments  | Stripe (+ Supabase Edge Function for checkout) |
+| PDF       | `jspdf`, `html2canvas`                         |
+| Forms     | React Hook Form + Zod                          |
 
 ## Routes
 
-| Path | Page |
-|---|---|
-| `/` | Landing |
-| `/create` | Invoice Creator |
-| `/recurring` | Recurring invoices |
-| `/portal/$invoiceId` | Client portal |
+| Path                 | Page               |
+| -------------------- | ------------------ |
+| `/`                  | Landing            |
+| `/create`            | Invoice Creator    |
+| `/recurring`         | Recurring invoices |
+| `/portal/$invoiceId` | Client portal      |
 
 ## Getting started
 
@@ -75,13 +75,13 @@ bun run preview
 
 Copy from [`.env.example`](./.env.example):
 
-| Variable | Purpose |
-|---|---|
-| `VITE_BLINK_PROJECT_ID` | Blink project id (required for local app) |
-| `VITE_BLINK_PUBLISHABLE_KEY` | Blink publishable key (required for local app) |
-| `STRIPE_PUBLISHABLE_KEY` / `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | Stripe billing |
-| `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` | Client-side Supabase |
-| `SUPABASE_URL` / `SUPABASE_ANON_KEY` / `SUPABASE_SERVICE_ROLE_KEY` | Server / edge functions |
+| Variable                                                                 | Purpose                                        |
+| ------------------------------------------------------------------------ | ---------------------------------------------- |
+| `VITE_BLINK_PROJECT_ID`                                                  | Blink project id (required for local app)      |
+| `VITE_BLINK_PUBLISHABLE_KEY`                                             | Blink publishable key (required for local app) |
+| `STRIPE_PUBLISHABLE_KEY` / `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | Stripe billing                                 |
+| `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`                           | Client-side Supabase                           |
+| `SUPABASE_URL` / `SUPABASE_ANON_KEY` / `SUPABASE_SERVICE_ROLE_KEY`       | Server / edge functions                        |
 
 Checkout lives under `supabase/functions/stripe-checkout/`.
 

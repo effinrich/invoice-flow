@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { Link } from '@tanstack/react-router'
+import { useEffect } from "react";
+import { Link } from "@tanstack/react-router";
 
 /**
  * 404 / Not Found page for unknown routes.
@@ -13,43 +13,43 @@ import { Link } from '@tanstack/react-router'
  */
 export default function NotFound() {
   useEffect(() => {
-    const meta = document.createElement('meta')
-    meta.name = 'robots'
-    meta.content = 'noindex, nofollow'
-    meta.setAttribute('data-notfound', 'true')
-    document.head.appendChild(meta)
-    const prevTitle = document.title
-    document.title = 'Page not found — InvoiceFlow'
+    const meta = document.createElement("meta");
+    meta.name = "robots";
+    meta.content = "noindex, nofollow";
+    meta.setAttribute("data-notfound", "true");
+    document.head.appendChild(meta);
+    const prevTitle = document.title;
+    document.title = "Page not found — InvoiceFlow";
     return () => {
-      document.head.removeChild(meta)
-      document.title = prevTitle
-    }
-  }, [])
+      document.head.removeChild(meta);
+      document.title = prevTitle;
+    };
+  }, []);
 
   return (
     <main
       role="main"
       style={{
-        minHeight: '60vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        padding: '2rem',
-        gap: '0.75rem',
+        minHeight: "60vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        padding: "2rem",
+        gap: "0.75rem",
       }}
     >
-      <h1 style={{ fontSize: '2rem', fontWeight: 700 }}>Page not found</h1>
-      <p style={{ maxWidth: '32rem', color: '#5c5347' }}>
-        The page you are looking for does not exist or may have moved. Head back to
-        InvoiceFlow to create a professional invoice in under 60 seconds.
+      <h1 style={{ fontSize: "2rem", fontWeight: 700 }}>Page not found</h1>
+      <p style={{ maxWidth: "32rem", color: "#5c5347" }}>
+        The page you are looking for does not exist or may have moved. Head back to InvoiceFlow to
+        create a professional invoice in under 60 seconds.
       </p>
       <p>
-        <Link to="/" style={{ color: '#F94E10', fontWeight: 600 }}>
+        <Link to="/" style={{ color: "#F94E10", fontWeight: 600 }}>
           Go to the homepage
         </Link>
       </p>
     </main>
-  )
+  );
 }

@@ -1,51 +1,55 @@
-import type { RecurringInvoice } from '../types/recurring'
-import type { InvoiceData } from '../types/invoice'
-import { calculateTotals, CURRENCIES } from '../types/invoice'
+import type { RecurringInvoice } from "../types/recurring";
+import type { InvoiceData } from "../types/invoice";
+import { calculateTotals, CURRENCIES } from "../types/invoice";
 
 /** Build the HTML email body for an automatically generated invoice */
 export function buildInvoiceEmailHtml(params: {
-  template: RecurringInvoice
-  invoiceData: InvoiceData
-  invoiceId: string
-  portalBaseUrl: string
+  template: RecurringInvoice;
+  invoiceData: InvoiceData;
+  invoiceId: string;
+  portalBaseUrl: string;
 }): string {
-  const { template, invoiceData, invoiceId, portalBaseUrl } = params
-  const { subtotal, taxAmount, discountAmount, total } = calculateTotals(invoiceData)
-  const sym = CURRENCIES[invoiceData.currency] || '$'
-  const fmt = (n: number) => sym + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  const { template, invoiceData, invoiceId, portalBaseUrl } = params;
+  const { subtotal, tax, discount, total } = calculateTotals(invoiceData);
+  const sym = CURRENCIES[invoiceData.currency] || "$";
+  const fmt = (n: number) =>
+    sym + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  const accent = template.accentColor.startsWith('hsl') ? template.accentColor : 'hsl(16 95% 52%)'
-  const accentHex = '#F94E10' // fallback solid hex for email clients
+  const accentHex = "#F94E10"; // fallback solid hex for email clients
 
-  const portalUrl = `${portalBaseUrl}/portal/${invoiceId}`
-  const paymentUrl = template.stripePaymentLinkUrl || portalUrl
+  const portalUrl = `${portalBaseUrl}/portal/${invoiceId}`;
+  const paymentUrl = template.stripePaymentLinkUrl || portalUrl;
 
   const lineItemsHtml = invoiceData.lineItems
-    .filter(li => li.description.trim())
-    .map(li => `
+    .filter((li) => li.description.trim())
+    .map(
+      (li) => `
       <tr>
         <td style="padding:10px 16px;border-bottom:1px solid #f0ece8;font-size:14px;color:#38312e;">${li.description}</td>
         <td style="padding:10px 16px;border-bottom:1px solid #f0ece8;font-size:14px;color:#38312e;text-align:center;">${li.quantity}</td>
         <td style="padding:10px 16px;border-bottom:1px solid #f0ece8;font-size:14px;color:#38312e;text-align:right;">${fmt(li.rate)}</td>
         <td style="padding:10px 16px;border-bottom:1px solid #f0ece8;font-size:14px;color:#38312e;text-align:right;font-weight:600;">${fmt(li.quantity * li.rate)}</td>
-      </tr>`)
-    .join('')
+      </tr>`,
+    )
+    .join("");
 
-  const taxRow = taxAmount > 0
-    ? `<tr><td colspan="3" style="padding:8px 16px;text-align:right;font-size:13px;color:#9c8572;">Tax (${invoiceData.taxRate}%)</td><td style="padding:8px 16px;text-align:right;font-size:13px;color:#9c8572;">${fmt(taxAmount)}</td></tr>`
-    : ''
+  const taxRow =
+    tax > 0
+      ? `<tr><td colspan="3" style="padding:8px 16px;text-align:right;font-size:13px;color:#9c8572;">Tax (${invoiceData.taxRate}%)</td><td style="padding:8px 16px;text-align:right;font-size:13px;color:#9c8572;">${fmt(tax)}</td></tr>`
+      : "";
 
-  const discountRow = discountAmount > 0
-    ? `<tr><td colspan="3" style="padding:8px 16px;text-align:right;font-size:13px;color:#9c8572;">Discount</td><td style="padding:8px 16px;text-align:right;font-size:13px;color:#9c8572;">-${fmt(discountAmount)}</td></tr>`
-    : ''
+  const discountRow =
+    discount > 0
+      ? `<tr><td colspan="3" style="padding:8px 16px;text-align:right;font-size:13px;color:#9c8572;">Discount</td><td style="padding:8px 16px;text-align:right;font-size:13px;color:#9c8572;">-${fmt(discount)}</td></tr>`
+      : "";
 
   const logoBlock = template.logoUrl
     ? `<img src="${template.logoUrl}" alt="${template.fromName}" style="height:40px;width:auto;object-fit:contain;margin-bottom:4px;" />`
-    : `<div style="width:44px;height:44px;border-radius:10px;background:${accentHex};color:#fff;font-weight:700;font-size:16px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:4px;">${template.logoText}</div>`
+    : `<div style="width:44px;height:44px;border-radius:10px;background:${accentHex};color:#fff;font-weight:700;font-size:16px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:4px;">${template.logoText}</div>`;
 
   const notesBlock = invoiceData.notes
     ? `<tr><td colspan="4" style="padding:16px;background:#faf9f7;border-top:1px solid #f0ece8;border-radius:0 0 8px 8px;font-size:13px;color:#9c8572;">${invoiceData.notes}</td></tr>`
-    : ''
+    : "";
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -68,7 +72,7 @@ export function buildInvoiceEmailHtml(params: {
                   <td>
                     ${logoBlock}
                     <div style="font-size:18px;font-weight:700;color:#1a1208;margin-top:4px;">${invoiceData.fromName || template.fromName}</div>
-                    ${invoiceData.fromEmail ? `<div style="font-size:13px;color:#9c8572;">${invoiceData.fromEmail}</div>` : ''}
+                    ${invoiceData.fromEmail ? `<div style="font-size:13px;color:#9c8572;">${invoiceData.fromEmail}</div>` : ""}
                   </td>
                   <td align="right" valign="top">
                     <div style="font-size:28px;font-weight:800;color:${accentHex};">INVOICE</div>
@@ -86,8 +90,8 @@ export function buildInvoiceEmailHtml(params: {
             <td style="padding:20px 32px;background:#faf9f7;border-bottom:1px solid #f0ece8;">
               <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9c8572;margin-bottom:6px;">Bill To</div>
               <div style="font-size:15px;font-weight:600;color:#1a1208;">${invoiceData.toName}</div>
-              ${invoiceData.toEmail ? `<div style="font-size:13px;color:#6b5c4c;">${invoiceData.toEmail}</div>` : ''}
-              ${invoiceData.toAddress ? `<div style="font-size:13px;color:#9c8572;">${invoiceData.toAddress}</div>` : ''}
+              ${invoiceData.toEmail ? `<div style="font-size:13px;color:#6b5c4c;">${invoiceData.toEmail}</div>` : ""}
+              ${invoiceData.toAddress ? `<div style="font-size:13px;color:#9c8572;">${invoiceData.toAddress}</div>` : ""}
             </td>
           </tr>
 
@@ -133,10 +137,14 @@ export function buildInvoiceEmailHtml(params: {
               >
                 View &amp; Pay Invoice →
               </a>
-              ${template.stripePaymentLinkUrl ? '' : `
+              ${
+                template.stripePaymentLinkUrl
+                  ? ""
+                  : `
               <div style="font-size:12px;color:#9c8572;margin-top:12px;">
                 Or open: <a href="${portalUrl}" style="color:${accentHex};">${portalUrl}</a>
-              </div>`}
+              </div>`
+              }
             </td>
           </tr>
 
@@ -145,7 +153,7 @@ export function buildInvoiceEmailHtml(params: {
             <td style="padding:20px 32px;background:#faf9f7;border-top:1px solid #f0ece8;text-align:center;">
               <div style="font-size:12px;color:#9c8572;">
                 Sent by <strong>${invoiceData.fromName || template.fromName}</strong> via InvoiceFlow
-                ${invoiceData.fromEmail ? ` · <a href="mailto:${invoiceData.fromEmail}" style="color:${accentHex};text-decoration:none;">${invoiceData.fromEmail}</a>` : ''}
+                ${invoiceData.fromEmail ? ` · <a href="mailto:${invoiceData.fromEmail}" style="color:${accentHex};text-decoration:none;">${invoiceData.fromEmail}</a>` : ""}
               </div>
             </td>
           </tr>
@@ -155,39 +163,42 @@ export function buildInvoiceEmailHtml(params: {
     </tr>
   </table>
 </body>
-</html>`
+</html>`;
 }
 
 /** Plain-text fallback for email clients that don't render HTML */
 export function buildInvoiceEmailText(params: {
-  template: RecurringInvoice
-  invoiceData: InvoiceData
-  invoiceId: string
-  portalBaseUrl: string
+  template: RecurringInvoice;
+  invoiceData: InvoiceData;
+  invoiceId: string;
+  portalBaseUrl: string;
 }): string {
-  const { template, invoiceData, invoiceId, portalBaseUrl } = params
-  const { total } = calculateTotals(invoiceData)
-  const sym = CURRENCIES[invoiceData.currency] || '$'
-  const fmt = (n: number) => sym + n.toLocaleString('en-US', { minimumFractionDigits: 2 })
-  const portalUrl = `${portalBaseUrl}/portal/${invoiceId}`
-  const paymentUrl = template.stripePaymentLinkUrl || portalUrl
+  const { template, invoiceData, invoiceId, portalBaseUrl } = params;
+  const { total } = calculateTotals(invoiceData);
+  const sym = CURRENCIES[invoiceData.currency] || "$";
+  const fmt = (n: number) => sym + n.toLocaleString("en-US", { minimumFractionDigits: 2 });
+  const portalUrl = `${portalBaseUrl}/portal/${invoiceId}`;
+  const paymentUrl = template.stripePaymentLinkUrl || portalUrl;
 
   const lines = [
     `INVOICE #${invoiceData.invoiceNumber}`,
     `From: ${invoiceData.fromName} <${invoiceData.fromEmail}>`,
     `To: ${invoiceData.toName} <${invoiceData.toEmail}>`,
     `Issued: ${invoiceData.issueDate}  |  Due: ${invoiceData.dueDate}`,
-    '',
-    '--- Line Items ---',
-    ...invoiceData.lineItems.filter(li => li.description.trim()).map(
-      li => `${li.description}  x${li.quantity}  @ ${fmt(li.rate)}  = ${fmt(li.quantity * li.rate)}`
-    ),
-    '',
+    "",
+    "--- Line Items ---",
+    ...invoiceData.lineItems
+      .filter((li) => li.description.trim())
+      .map(
+        (li) =>
+          `${li.description}  x${li.quantity}  @ ${fmt(li.rate)}  = ${fmt(li.quantity * li.rate)}`,
+      ),
+    "",
     `Total Due: ${fmt(total)}`,
-    '',
+    "",
     `Pay here: ${paymentUrl}`,
-    '',
-    invoiceData.notes || '',
-  ]
-  return lines.join('\n').trim()
+    "",
+    invoiceData.notes || "",
+  ];
+  return lines.join("\n").trim();
 }

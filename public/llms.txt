@@ -1,38 +1,23 @@
-# InvoiceFlow
+# InvoiceFlow — Free Invoice Generator for Freelancers
 
-> InvoiceFlow is a browser-based invoicing app for freelancers and small agencies. It turns client and project details into a polished, professional PDF invoice in under 60 seconds, with a live preview that updates as you type.
+> Create professional invoices in under 60 seconds. Live preview, PDF export, auto-calculations. Free forever.
 
-InvoiceFlow is a freemium SaaS that runs entirely in the browser — no installation and no account required to create your first invoice. It focuses on doing invoicing exceptionally well rather than replicating full accounting suites.
+## Features
 
-## What it does
-
-- **Create invoices fast**: Fill in sender, client, and line items and get a pixel-perfect invoice in about a minute.
-- **Live preview**: The invoice renders in real time as you type — no "generate" button or delay.
-- **PDF export**: Download print-ready PDF invoices (Pro feature).
-- **Multi-currency**: Supports USD, EUR, GBP, CAD, AUD, JPY, INR, and BRL, plus tax and discount handling.
-- **Recurring invoices**: Set up schedules, clients, and history for repeat billing.
-- **Client portal**: A hosted recipient view for clients to view invoices.
-- **Branding**: Custom logo and accent colors on invoices (Pro feature).
+- [Invoice Creator](https://invoice-flow.blinkpowered.com/#/create) — Create invoices with live preview and auto-calculated totals
+- [Recurring Invoices](https://invoice-flow.blinkpowered.com/#/recurring) — Set up automatic invoice schedules for retainer clients
+- [PDF Export](https://invoice-flow.blinkpowered.com/#/create) — Download pixel-perfect PDF invoices ready for clients
 
 ## Pricing
 
-- **Free** — $0/mo: 5 invoices per month, PDF export, 1 template.
-- **Pro** — $12/mo: Unlimited invoices, 10+ templates, custom logo and brand colors, payment status tracking, client management, priority support.
-- **Agency** — $29/mo: Everything in Pro plus up to 10 team members, white-label option, and API access.
+- **Free** — 5 invoices/month, PDF via print, 1 template
+- **Pro ($12/mo)** — Unlimited invoices, direct PDF, 10+ templates, custom branding
+- **Agency ($29/mo)** — Everything in Pro plus team members, white-label, API access
 
-## Who it's for
+## About
 
-Design-conscious freelancers, contractors, and small agencies who want a fast, beautiful way to bill clients — without the complexity and cost of tools like QuickBooks or FreshBooks.
+InvoiceFlow is a free invoice generator built for freelancers and small agencies. Create professional invoices with custom branding, automatic tax calculations, and multi-currency support. No accounting software required.
 
-## Key pages
+## Contact
 
-- [Home / overview](https://invoice-flow.blinkpowered.com/): Product overview, features, and pricing.
-- [Invoice creator](https://invoice-flow.blinkpowered.com/create): The core tool for building an invoice with live preview.
-- [Recurring invoices](https://invoice-flow.blinkpowered.com/recurring): Schedules and history for repeat billing.
-
-## Common questions
-
-- **Is InvoiceFlow free?** Yes. The free tier lets you create up to 5 invoices per month with no account required to start.
-- **How fast is it?** Most users go from opening the app to downloading a finished PDF in under 60 seconds.
-- **Do I need to install anything?** No. InvoiceFlow runs entirely in your browser.
-- **Which currencies are supported?** USD, EUR, GBP, CAD, AUD, JPY, INR, and BRL.
+- Website: https://invoice-flow.blinkpowered.com/

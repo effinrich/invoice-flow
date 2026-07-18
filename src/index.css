@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;500&display=swap");
 
 /* ─────────────────────────────────────────────────────────────────────────────
    Blink UI Theme CSS
@@ -6,7 +6,7 @@
    BlinkUIProvider adds .theme-{name} + .dark/.light to <html>,
    activating the matching CSS variable set below.
    ───────────────────────────────────────────────────────────────────────────── */
-@import '@blinkdotnew/ui/styles';
+@import "@blinkdotnew/ui/styles";
 
 @tailwind base;
 @tailwind components;
@@ -33,7 +33,14 @@
     min-height: 100%;
     min-height: 100dvh;
     @apply bg-background text-foreground;
-    font-family: var(--font-sans), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-family:
+      var(--font-sans),
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      "Roboto",
+      sans-serif;
     letter-spacing: var(--tracking-normal);
   }
 }
@@ -60,26 +67,31 @@
    * --accent: 24 95% 63%;          (Lighter orange #FB923C)
    */
 
-  /* Colors - REPLACE ALL VALUES BELOW with your custom palette */
-  --background: 208 100% 97.0588%;
-  --foreground: 216.9231 19.1176% 26.6667%;
+  /* Colors — InvoiceFlow warm/ember palette (semantic tokens; replaces the
+     placeholder theme). These absorb the previously hand-inlined hex values:
+     #1a1208/#6b5c4c→foreground, #9c8572→muted-foreground, #e8e0d8→border,
+     #faf9f7→background, #f0ece8→muted. */
+  --background: 40 33% 98%; /* #faf9f7 */
+  --foreground: 33 53% 8%; /* #1a1208 */
   --card: 0 0% 100%;
-  --card-foreground: 216.9231 19.1176% 26.6667%;
+  --card-foreground: 33 53% 8%;
   --popover: 0 0% 100%;
-  --popover-foreground: 216.9231 19.1176% 26.6667%;
+  --popover-foreground: 33 53% 8%;
   /* InvoiceFlow — Ember Orange */
   --primary: 16 95% 52%;
   --primary-foreground: 0 0% 100%;
   --secondary: 20 14% 96%;
   --secondary-foreground: 20 10% 20%;
-  --muted: 20 10% 95%;
-  --muted-foreground: 20 8% 46%;
+  --muted: 30 24% 93%; /* #f0ece8 */
+  --muted-foreground: 27 18% 53%; /* #9c8572 */
   --accent: 16 95% 96%;
   --accent-foreground: 16 80% 35%;
   --destructive: 0 84.2365% 60.1961%;
   --destructive-foreground: 0 0% 100%;
-  --border: 20 8% 90%;
-  --input: 20 8% 90%;
+  --warning: 35 92% 47%; /* amber — due-soon / warning states */
+  --warning-foreground: 0 0% 100%;
+  --border: 30 27% 88%; /* #e8e0d8 */
+  --input: 30 27% 88%;
   --ring: 16 95% 52%;
 
   /* Charts */
@@ -100,18 +112,18 @@
   --sidebar-ring: 16 95% 52%;
 
   /* Fonts */
-  --font-sans: 'Space Grotesk', 'DM Sans', sans-serif;
-  --font-serif: 'DM Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: "Space Grotesk", "DM Sans", sans-serif;
+  --font-serif: "DM Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 
   /* Shadows */
   --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
   --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
-  --shadow-sm: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 1px 2px -2px hsl(0 0% 0% / 0.10);
-  --shadow: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 1px 2px -2px hsl(0 0% 0% / 0.10);
-  --shadow-md: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 2px 4px -2px hsl(0 0% 0% / 0.10);
-  --shadow-lg: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 4px 6px -2px hsl(0 0% 0% / 0.10);
-  --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.10), 0px 8px 10px -2px hsl(0 0% 0% / 0.10);
+  --shadow-sm: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 1px 2px -2px hsl(0 0% 0% / 0.1);
+  --shadow: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 1px 2px -2px hsl(0 0% 0% / 0.1);
+  --shadow-md: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 2px 4px -2px hsl(0 0% 0% / 0.1);
+  --shadow-lg: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 4px 6px -2px hsl(0 0% 0% / 0.1);
+  --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 8px 10px -2px hsl(0 0% 0% / 0.1);
   --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
 
   /* Misc */
@@ -125,26 +137,28 @@
 .theme-glass.dark,
 .theme-midnight.dark,
 .theme-minimal.dark {
-  /* ⚠️ AGENT MUST REPLACE: Dark mode colors - replace with your custom dark palette */
-  --background: 222.2222 47.3684% 11.1765%;
-  --foreground: 216 12.1951% 83.9216%;
-  --card: 217.2414 32.5843% 17.451%;
-  --card-foreground: 216 12.1951% 83.9216%;
-  --popover: 217.2414 32.5843% 17.451%;
-  --popover-foreground: 216 12.1951% 83.9216%;
+  /* Dark mode — warm/ember palette (mirrors the light tokens above) */
+  --background: 30 12% 8%;
+  --foreground: 33 15% 88%;
+  --card: 30 10% 12%;
+  --card-foreground: 33 15% 88%;
+  --popover: 30 10% 12%;
+  --popover-foreground: 33 15% 88%;
   /* InvoiceFlow dark mode */
   --primary: 16 90% 60%;
   --primary-foreground: 0 0% 100%;
   --secondary: 20 10% 18%;
   --secondary-foreground: 20 8% 70%;
-  --muted: 20 10% 15%;
-  --muted-foreground: 20 8% 50%;
+  --muted: 30 8% 15%;
+  --muted-foreground: 27 12% 60%;
   --accent: 16 40% 20%;
   --accent-foreground: 16 90% 60%;
   --destructive: 0 84.2365% 60.1961%;
   --destructive-foreground: 0 0% 100%;
-  --border: 20 8% 20%;
-  --input: 20 8% 20%;
+  --warning: 35 85% 55%;
+  --warning-foreground: 0 0% 100%;
+  --border: 30 6% 22%;
+  --input: 30 6% 22%;
   --ring: 16 90% 60%;
 
   /* Charts dark */
@@ -182,12 +196,12 @@
 }
 
 /* Remove number input arrows */
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   appearance: none;
 }
 
-input[type='number'] {
+input[type="number"] {
   appearance: textfield;
 }
 

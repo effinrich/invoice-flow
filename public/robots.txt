@@ -1,28 +1,35 @@
-# robots.txt for InvoiceFlow
-# Allow all well-behaved crawlers and AI agents full access.
+# InvoiceFlow — Free Invoice Generator for Freelancers
 User-agent: *
 Allow: /
 
-# AI / answer-engine crawlers (explicitly welcomed for AEO)
-User-agent: GPTBot
-Allow: /
-
+# AI search bots — allow citation and indexing
 User-agent: OAI-SearchBot
 Allow: /
 
-User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
 Allow: /
 
 User-agent: PerplexityBot
 Allow: /
 
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
 User-agent: ClaudeBot
 Allow: /
 
-User-agent: Claude-Web
+User-agent: Bingbot
 Allow: /
 
-User-agent: Google-Extended
-Allow: /
+# Block training-only crawlers if desired (comment out to allow)
+# User-agent: GPTBot
+# Disallow: /
+
+# Disallow internal paths
+Disallow: /api/
+Disallow: /auth
 
 Sitemap: https://invoice-flow.blinkpowered.com/sitemap.xml
