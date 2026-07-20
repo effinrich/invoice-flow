@@ -42,6 +42,12 @@ const indexRoute = createRoute({
   getParentRoute: () => publicRoute,
   path: "/",
   component: LandingPage,
+  // Signed-in home is the app shell (/invoices), not the marketing page.
+  beforeLoad: ({ context }) => {
+    if (!context.auth.isLoading && context.auth.user) {
+      throw redirect({ to: "/invoices" });
+    }
+  },
 });
 
 const portalRoute = createRoute({

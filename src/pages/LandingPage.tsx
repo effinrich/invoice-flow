@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -92,7 +92,13 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Safety net: if session resolves while already on `/`, send them into the app shell.
+  useEffect(() => {
+    if (user) navigate({ to: "/invoices", replace: true });
+  }, [user, navigate]);
+
   const goToCreate = () => navigate({ to: "/create" });
+  const goToDashboard = () => navigate({ to: "/invoices" });
   const goToRecurring = () => navigate({ to: "/recurring" });
   // Hash-history router owns the URL hash, so native `href="#id"` anchors trigger
   // a (non-existent) route instead of scrolling. Scroll the element directly.
@@ -243,10 +249,10 @@ export default function LandingPage() {
                   </span>
                 )}
                 <button
-                  onClick={goToCreate}
+                  onClick={goToDashboard}
                   className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white hover:opacity-90 bg-primary"
                 >
-                  Open Creator <ArrowRight size={15} />
+                  Open dashboard <ArrowRight size={15} />
                 </button>
                 <button
                   onClick={onLogout}
@@ -333,9 +339,9 @@ export default function LandingPage() {
             </a>
             <button
               className="w-full py-3 rounded-lg text-sm font-semibold text-white bg-primary"
-              onClick={goToCreate}
+              onClick={user ? goToDashboard : goToCreate}
             >
-              {user ? "Open Creator" : "Create Invoice Free"}
+              {user ? "Open dashboard" : "Create Invoice Free"}
             </button>
           </div>
         )}

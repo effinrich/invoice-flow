@@ -33,17 +33,22 @@ export function useAuth(): AuthState {
   return { user, isLoading, isAuthenticated: !!user };
 }
 
+/** After auth, land in the app shell (hash history). */
+function authRedirectUrl() {
+  return `${window.location.origin}/#/invoices`;
+}
+
 export async function signInWithEmail(email: string) {
   return supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: window.location.origin },
+    options: { emailRedirectTo: authRedirectUrl() },
   });
 }
 
 export async function signInWithGoogle() {
   return supabase.auth.signInWithOAuth({
     provider: "google",
-    options: { redirectTo: window.location.origin },
+    options: { redirectTo: authRedirectUrl() },
   });
 }
 
