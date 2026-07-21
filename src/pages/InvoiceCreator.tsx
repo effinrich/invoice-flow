@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import InvoiceForm from "../components/invoice/InvoiceForm";
 import InvoicePreview from "../components/invoice/InvoicePreview";
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { toast } from "@blinkdotnew/ui";
 import { useAppContext } from "../layouts/RootLayout";
+import { useProfile } from "../hooks/useProfile";
 
 // Read seed invoice from sessionStorage (set by RecurringInvoices)
 function getSeedInvoice(): InvoiceData | null {
@@ -36,13 +37,43 @@ function getSeedInvoice(): InvoiceData | null {
 
 export default function InvoiceCreator() {
   const { user, isPro, plan, onUpgrade, subLoading, onLogin } = useAppContext();
+  const { profile, isLoading: profileLoading } = useProfile(user?.id ?? null);
   const navigate = useNavigate();
   const [seedInvoice] = useState<InvoiceData | null>(() => getSeedInvoice());
   const [invoice, setInvoice] = useState<InvoiceData>(seedInvoice ?? defaultInvoice);
+  const [profileApplied, setProfileApplied] = useState(!!seedInvoice);
   const fromRecurring = !!seedInvoice;
   const [showPreview, setShowPreview] = useState(false);
   const [generatingPdf, setGeneratingPdf] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
+
+  // Prefill sender/branding from saved profile when starting a fresh invoice.
+  useEffect(() => {
+    if (seedInvoice || profileApplied || profileLoading || !profile) return;
+
+    const hasDefaults =
+      !!profile.displayName ||
+      !!profile.businessEmail ||
+      !!profile.businessAddress ||
+      !!profile.logoUrl ||
+      !!profile.logoText;
+
+    if (!hasDefaults) {
+      setProfileApplied(true);
+      return;
+    }
+
+    setInvoice((prev) => ({
+      ...prev,
+      fromName: profile.displayName || prev.fromName,
+      fromEmail: profile.businessEmail || prev.fromEmail,
+      fromAddress: profile.businessAddress || prev.fromAddress,
+      accentColor: profile.accentColor || prev.accentColor,
+      logoText: profile.logoText || prev.logoText,
+      logoUrl: profile.logoUrl ?? prev.logoUrl,
+    }));
+    setProfileApplied(true);
+  }, [seedInvoice, profileApplied, profileLoading, profile]);
 
   // Pro: generate a real PDF file, no browser dialog
   const handleProDownload = async () => {
