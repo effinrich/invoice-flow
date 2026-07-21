@@ -33,7 +33,6 @@ export function useAuth(): AuthState {
   return { user, isLoading, isAuthenticated: !!user };
 }
 
-/** After auth, land in the app shell (hash history). */
 function authRedirectUrl() {
   return `${window.location.origin}/#/invoices`;
 }

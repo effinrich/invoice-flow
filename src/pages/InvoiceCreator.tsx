@@ -47,21 +47,8 @@ export default function InvoiceCreator() {
   const [generatingPdf, setGeneratingPdf] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
 
-  // Prefill sender/branding from saved profile when starting a fresh invoice.
   useEffect(() => {
     if (seedInvoice || profileApplied || profileLoading || !profile) return;
-
-    const hasDefaults =
-      !!profile.displayName ||
-      !!profile.businessEmail ||
-      !!profile.businessAddress ||
-      !!profile.logoUrl ||
-      !!profile.logoText;
-
-    if (!hasDefaults) {
-      setProfileApplied(true);
-      return;
-    }
 
     setInvoice((prev) => ({
       ...prev,

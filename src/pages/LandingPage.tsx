@@ -92,7 +92,6 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Safety net: if session resolves while already on `/`, send them into the app shell.
   useEffect(() => {
     if (user) navigate({ to: "/invoices", replace: true });
   }, [user, navigate]);

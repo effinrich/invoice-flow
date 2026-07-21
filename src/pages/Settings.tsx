@@ -187,7 +187,7 @@ export default function Settings() {
             <div className="flex justify-end pt-2">
               <button
                 type="button"
-                onClick={() => void handleSave()}
+                onClick={() => handleSave()}
                 disabled={saving}
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-opacity hover:opacity-90 disabled:opacity-60"
               >

@@ -79,7 +79,7 @@ export function useProfile(userId: string | null): ProfileState {
 
   useEffect(() => {
     setIsLoading(true);
-    void fetchProfile();
+    fetchProfile();
   }, [fetchProfile]);
 
   const save = useCallback(

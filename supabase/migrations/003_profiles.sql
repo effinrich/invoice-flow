@@ -1,5 +1,4 @@
--- Business defaults for invoice sender / branding (Settings page).
--- Prefills InvoiceCreator when signed in.
+-- Business defaults for invoice sender / branding
 create table public.profiles (
   user_id uuid primary key references auth.users(id) on delete cascade,
   display_name text,
