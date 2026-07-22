@@ -1,5 +1,4 @@
 import { Lock, Sparkles } from "lucide-react";
-import { blink } from "../blink/client";
 
 interface ProGateProps {
   feature: string;
@@ -38,12 +37,4 @@ export function ProGate({ feature, description, onUpgrade, children, isPro }: Pr
       </div>
     </div>
   );
-}
-
-export function LoginToUpgrade(_props: { onLogin: () => void }) {
-  return null; // handled inline via blink.auth.login()
-}
-
-export function loginForUpgrade() {
-  blink.auth.login(window.location.href + "?upgrade=1");
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -19,7 +19,10 @@ import {
   LogOut,
   RotateCcw,
 } from "lucide-react";
+import { toast } from "@blinkdotnew/ui";
 import { useAppContext } from "../layouts/RootLayout";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const features = [
   {
@@ -91,6 +94,8 @@ export default function LandingPage() {
   const { user, isPro, plan, onUpgrade, onLogin, onLogout } = useAppContext();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [notifyEmail, setNotifyEmail] = useState("");
+  const [notifyDone, setNotifyDone] = useState(false);
 
   useEffect(() => {
     if (user) navigate({ to: "/invoices", replace: true });
@@ -103,6 +108,21 @@ export default function LandingPage() {
   // a (non-existent) route instead of scrolling. Scroll the element directly.
   const scrollToId = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleNotifySubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const email = notifyEmail.trim();
+    if (!EMAIL_RE.test(email)) {
+      toast.error("Enter a valid email address");
+      return;
+    }
+    // No waitlist backend yet — client-side success only (never mailto:).
+    setNotifyDone(true);
+    setNotifyEmail("");
+    toast.success("You're on the list", {
+      description: "We'll email you when there's something worth knowing.",
+    });
   };
 
   const plans = [
@@ -726,26 +746,77 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer + notifications signup */}
       <footer className="border-t px-6 py-12 border-border bg-background">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-primary">
-              <FileText size={14} className="text-white" />
-            </div>
-            <span className="font-bold text-foreground">
-              Invoice<span className="text-primary">Flow</span>
-            </span>
+        <div className="max-w-6xl mx-auto flex flex-col gap-10">
+          <div
+            id="notifications"
+            className="max-w-xl mx-auto w-full text-center md:text-left md:mx-0"
+          >
+            <h3 className="text-base font-bold text-foreground mb-1">
+              Get product notifications
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Occasional updates on new features — no spam, unsubscribe anytime.
+            </p>
+            {notifyDone ? (
+              <p className="inline-flex items-center gap-2 text-sm font-medium text-foreground">
+                <CheckCircle2 size={16} className="text-[hsl(151_55%_35%)] shrink-0" />
+                Thanks — you&apos;re signed up for notifications.
+              </p>
+            ) : (
+              <form
+                onSubmit={handleNotifySubmit}
+                className="flex flex-col sm:flex-row gap-2"
+                noValidate
+              >
+                <label className="sr-only" htmlFor="notify-email">
+                  Email for notifications
+                </label>
+                <input
+                  id="notify-email"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  required
+                  value={notifyEmail}
+                  onChange={(e) => setNotifyEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="flex-1 px-4 py-2.5 rounded-xl text-sm border border-border bg-card text-foreground outline-none focus:border-primary focus:ring-[3px] focus:ring-[hsl(16_95%_52%_/_0.15)]"
+                />
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-primary hover:opacity-90 active:scale-[0.98] transition-all shrink-0"
+                >
+                  Notify me
+                </button>
+              </form>
+            )}
           </div>
-          <p className="text-sm text-muted-foreground">
-            © 2024 InvoiceFlow. Built for freelancers, by freelancers.
-          </p>
-          <div className="flex gap-6">
-            {["Privacy", "Terms", "Contact"].map((link) => (
-              <a key={link} href="#" className="text-sm hover:underline text-muted-foreground">
-                {link}
-              </a>
-            ))}
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-primary">
+                <FileText size={14} className="text-white" />
+              </div>
+              <span className="font-bold text-foreground">
+                Invoice<span className="text-primary">Flow</span>
+              </span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              © 2024 InvoiceFlow. Built for freelancers, by freelancers.
+            </p>
+            <div className="flex gap-6">
+              <button
+                type="button"
+                className="text-sm hover:underline text-muted-foreground"
+                onClick={() => scrollToId("notifications")}
+              >
+                Notifications
+              </button>
+              <span className="text-sm text-muted-foreground/60">Privacy</span>
+              <span className="text-sm text-muted-foreground/60">Terms</span>
+            </div>
           </div>
         </div>
       </footer>

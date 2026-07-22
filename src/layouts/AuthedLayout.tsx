@@ -1,26 +1,23 @@
 import { useEffect } from "react";
-import { Outlet } from "@tanstack/react-router";
-import { blink } from "../blink/client";
+import { Outlet, useNavigate } from "@tanstack/react-router";
 import { useAppContext } from "./RootLayout";
 
+/**
+ * Optional layout for auth-gated route trees.
+ * Prefer router `beforeLoad` guards (see router.tsx); this is a client-side fallback.
+ * Uses Supabase session via AppContext — never Blink Auth.
+ */
 export function AuthedLayout() {
   const { user, subLoading } = useAppContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!subLoading && !user) {
-      blink.auth.login(window.location.href);
+      void navigate({ to: "/" });
     }
-  }, [user, subLoading]);
+  }, [user, subLoading, navigate]);
 
-  if (subLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" />
-      </div>
-    );
-  }
-
-  if (!user) {
+  if (subLoading || !user) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" />

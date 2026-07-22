@@ -13,7 +13,7 @@ export function useAuth(): AuthState {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
+    // Get initial session (also consumes ?code= from PKCE magic-link / OAuth redirect)
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setIsLoading(false);
@@ -33,8 +33,14 @@ export function useAuth(): AuthState {
   return { user, isLoading, isAuthenticated: !!user };
 }
 
+/**
+ * Redirect target for magic-link / OAuth.
+ * Must be origin-only (no hash). Hash fragments break Supabase redirects and
+ * conflict with this app's hash router; after session is established the app
+ * navigates to `/#/invoices`.
+ */
 function authRedirectUrl() {
-  return `${window.location.origin}/#/invoices`;
+  return `${window.location.origin}/`;
 }
 
 export async function signInWithEmail(email: string) {
@@ -52,5 +58,6 @@ export async function signInWithGoogle() {
 }
 
 export async function signOut() {
+  // Clears local session storage and notifies onAuthStateChange listeners.
   return supabase.auth.signOut();
 }

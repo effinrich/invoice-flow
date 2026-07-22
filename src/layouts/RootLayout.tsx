@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from "react";
-import { Outlet } from "@tanstack/react-router";
+import { Outlet, useNavigate, useRouter } from "@tanstack/react-router";
 import { useAuth, signOut } from "../hooks/useAuth";
 import { useSubscription, recordSubscription } from "../hooks/useSubscription";
 import { UpgradeModal } from "../components/UpgradeModal";
@@ -31,6 +31,8 @@ export function RootLayout() {
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [upgradePlan, setUpgradePlan] = useState<"pro" | "agency">("pro");
   const [signInOpen, setSignInOpen] = useState(false);
+  const navigate = useNavigate();
+  const router = useRouter();
 
   const { user, isLoading: authLoading } = useAuth();
   const {
@@ -82,6 +84,14 @@ export function RootLayout() {
     );
   }
 
+  const handleLogout = async () => {
+    await signOut();
+    // beforeLoad guards do not always re-run on context-only auth changes —
+    // navigate out of the protected shell and invalidate so they re-check.
+    await router.invalidate();
+    await navigate({ to: "/" });
+  };
+
   const context: AppContext = {
     user,
     isPro,
@@ -90,7 +100,9 @@ export function RootLayout() {
     subLoading,
     onUpgrade: handleOpenUpgrade,
     onLogin: () => setSignInOpen(true),
-    onLogout: () => signOut(),
+    onLogout: () => {
+      void handleLogout();
+    },
   };
 
   return (

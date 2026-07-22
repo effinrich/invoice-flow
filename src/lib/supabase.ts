@@ -7,4 +7,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error("Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY env vars");
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    // PKCE puts `?code=` in the query string (safe with hash routers).
+    // Implicit flow puts tokens in `#access_token=...`, which fights createHashHistory.
+    flowType: "pkce",
+    detectSessionInUrl: true,
+    persistSession: true,
+    autoRefreshToken: true,
+  },
+});

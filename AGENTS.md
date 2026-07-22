@@ -24,6 +24,6 @@ This is a single-context repo: read root `CONTEXT.md` and root `docs/adr/` when 
 
 - Vite dev server runs on port 3000 (`strictPort: true`).
 - Auth is Supabase Auth; signed-in home is `/invoices` (AppLayout + left nav). `/create` stays public for guest invoicing.
-- Routing uses hash history; post-auth redirect targets `/#/invoices`.
+- Routing uses hash history; signed-in home is `/#/invoices`. Magic-link/OAuth `emailRedirectTo` must be origin-only (`http://localhost:3000/`) — no hash — then the app routes to `/invoices`.
 - Business/sender settings live in Supabase `public.profiles` (`supabase/migrations/`) and prefill Invoice Creator when signed in.
 - UI still uses `@blinkdotnew/ui` in places; `CONTEXT.md` may still describe Blink Auth/DB even though runtime auth/profiles are Supabase.
