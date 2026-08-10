@@ -43,7 +43,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/node": "^24",
+    "@types/node": "^26",
     "autoprefixer": "10.5.4",
     "glob": "^13.0.6",
     "oxfmt": "^0.62.0",
