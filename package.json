@@ -46,7 +46,7 @@
     "@types/node": "^24",
     "autoprefixer": "10.5.4",
     "glob": "^13.0.6",
-    "oxfmt": "^0.62.0",
+    "oxfmt": "^0.63.0",
     "oxlint": "^1.74.0",
     "postcss": "8.5.26",
     "stylelint": "^17.7.0",
